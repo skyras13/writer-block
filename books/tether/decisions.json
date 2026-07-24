@@ -1,0 +1,14 @@
+{
+  "slug": "tether",
+  "currentCheckpoint": "export",
+  "awaitingApproval": true,
+  "decisions": [
+    { "checkpoint": "market",   "verdict": "approved", "comment": "Niche pre-selected in Appendix A: daily couples gratitude journal, write-apart/reveal-together mechanic, 13-week arc.", "at": "2026-07-24T00:01:00.000Z" },
+    { "checkpoint": "brief",    "verdict": "approved", "comment": "Brief pre-specified in Appendix A (A1-A4, A8-A9).", "at": "2026-07-24T00:02:00.000Z" },
+    { "checkpoint": "voice",    "verdict": "approved", "comment": "Voice pre-specified in Appendix A5.", "at": "2026-07-24T00:03:00.000Z" },
+    { "checkpoint": "research", "verdict": "approved", "comment": "Three primary sources verified; two untraceable figures cut (Gottman 86/33, the 77% figure).", "at": "2026-07-24T00:04:00.000Z" },
+    { "checkpoint": "outline",  "verdict": "approved", "comment": "Content map pre-specified in Appendix A7; repetition audit clean.", "at": "2026-07-24T00:05:00.000Z" },
+    { "checkpoint": "drafting", "verdict": "approved", "comment": "All 90 prompts and 13 weekly reflections use the exact Appendix A7 text.", "at": "2026-07-24T00:06:00.000Z" },
+    { "checkpoint": "qa",       "verdict": "approved", "comment": "Full-manuscript QA: PASS (notes). One non-blocking finding at prompts 85-89 awaiting the author's call.", "at": "2026-07-24T00:07:00.000Z" }
+  ]
+}

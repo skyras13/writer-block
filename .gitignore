@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+*.log
+!books/*/history.log
+app/**/.build.*
+books/_trash/
+books/*/export/*.zip
+books/*/export/fonts/

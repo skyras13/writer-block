@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "book-factory",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["start"],
+      "cwd": "app",
+      "port": 3000
+    }
+  ]
+}

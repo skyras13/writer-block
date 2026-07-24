@@ -1,0 +1,36 @@
+{
+  "slug": "tether",
+  "title": "Tether",
+  "subtitle": "A Couples Gratitude Journal for Noticing Why",
+  "author": "[AUTHOR NAME]",
+  "genre": "journal",
+  "topic": "A daily couples gratitude journal built on a write-apart, reveal-together ritual, arranged as a 13-week thematic arc across 90 days.",
+  "phase": "export",
+  "status": "active",
+  "created": "2026-07-24T00:00:00.000Z",
+  "updated": "2026-07-24T00:00:00.000Z",
+  "language": "en-US",
+  "kdp": {
+    "trim": "6x9",
+    "keywords": [
+      "couples gratitude journal",
+      "relationship journal for two",
+      "his and hers journal",
+      "anniversary gift for couples",
+      "90 day gratitude journal",
+      "couples journal prompts",
+      "long distance relationship gift"
+    ],
+    "categories": [
+      "Self-Help > Relationships",
+      "Family & Relationships > Love & Romance",
+      "Crafts, Hobbies & Home > Crafts & Hobbies > Journaling"
+    ],
+    "comps": [
+      "The Couple's Gratitude Journal (Sophia Godkin)",
+      "Our Gratitude Journal: 52 Weeks (Marcus & Ashley Kusi)",
+      "Gratitude Journal for Couples (Simply Zen Press)"
+    ],
+    "blurb": "You already know why you love them. Ninety days to say it out loud."
+  }
+}

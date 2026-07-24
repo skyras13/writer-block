@@ -1,0 +1,321 @@
+/* ---------------------------------------------------------------------------
+ * Book Factory — paperback interior stylesheet (KDP print)
+ *
+ * Paired with build.js, which injects the trim-specific @page block ABOVE this
+ * file (page size, mirrored margins, running heads). Everything here is the
+ * typography and page-flow that applies at any trim.
+ *
+ * Written for weasyprint, which implements the CSS Paged Media module properly.
+ * wkhtmltopdf ignores most of this; calibre ignores nearly all of it. If the
+ * paperback matters, install weasyprint.
+ *
+ * Print rules that matter for a book that doesn't look self-published:
+ *   • Chapters open on a RIGHT-hand (recto) page.
+ *   • Body text is justified with hyphenation — unjustified body copy reads as amateur in print.
+ *   • First paragraph of a chapter is not indented; every subsequent one is.
+ *   • No widows or orphans, anywhere.
+ *   • Physical units only (pt/in). Screen units mean nothing to a printer.
+ * ------------------------------------------------------------------------- */
+
+/* --- Page flow ----------------------------------------------------------- */
+
+@page :blank {
+  @top-left { content: none }
+  @top-right { content: none }
+  @bottom-left { content: none }
+  @bottom-right { content: none }
+}
+
+/* Front matter: no running heads, roman numerals. */
+@page front {
+  @top-left { content: none }
+  @top-right { content: none }
+  @bottom-center { content: counter(page, lower-roman) }
+}
+
+/* --- Base typography ----------------------------------------------------- */
+
+html {
+  font-size: 11pt;
+}
+
+body {
+  font-family: "Georgia", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+  font-size: 11pt;
+  line-height: 1.42;             /* ~15.6pt leading on 11pt — comfortable for a trade paperback */
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphenate-limit-chars: 6 3 3;  /* don't hyphenate short words or leave 2-letter fragments */
+  widows: 2;
+  orphans: 2;
+  margin: 0;
+  padding: 0;
+  color: #000;
+}
+
+p {
+  margin: 0;
+  text-indent: 1.5em;
+  orphans: 2;
+  widows: 2;
+}
+
+/* No indent on the first paragraph of any block. */
+h1 + p, h2 + p, h3 + p, h4 + p,
+hr + p,
+blockquote + p,
+.no-indent,
+p.first {
+  text-indent: 0;
+}
+
+/* --- Chapter openings ---------------------------------------------------- */
+
+h1 {
+  string-set: chaptertitle content();  /* feeds the recto running head */
+  page-break-before: right;            /* chapters open on a recto page */
+  page-break-after: avoid;
+  font-size: 20pt;
+  font-weight: normal;
+  line-height: 1.15;
+  text-align: left;
+  margin: 1.2in 0 0.5in 0;             /* the sink — white space above a chapter opener */
+  hyphens: none;
+  letter-spacing: 0.01em;
+}
+
+h2 {
+  page-break-after: avoid;
+  font-size: 13pt;
+  font-weight: normal;
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  margin: 22pt 0 8pt;
+  text-align: left;
+  hyphens: none;
+}
+
+h3 {
+  page-break-after: avoid;
+  font-size: 11pt;
+  font-style: italic;
+  font-weight: normal;
+  margin: 16pt 0 4pt;
+  text-align: left;
+  hyphens: none;
+}
+
+h4 {
+  page-break-after: avoid;
+  font-size: 10pt;
+  font-weight: bold;
+  margin: 12pt 0 3pt;
+  hyphens: none;
+}
+
+/* --- Front matter -------------------------------------------------------- */
+
+.frontmatter { page: front; }
+
+.titlepage {
+  page-break-before: right;
+  page-break-after: always;
+  text-align: center;
+  margin-top: 2.2in;
+}
+
+.titlepage h1 {
+  page-break-before: avoid;
+  font-size: 30pt;
+  margin: 0 0 14pt;
+  text-align: center;
+  letter-spacing: 0.03em;
+}
+
+.titlepage .subtitle {
+  font-size: 12pt;
+  font-style: italic;
+  margin-bottom: 2.2in;
+}
+
+.titlepage .author {
+  font-size: 12pt;
+  font-variant: small-caps;
+  letter-spacing: 0.14em;
+}
+
+.copyright {
+  page-break-before: always;
+  page-break-after: always;
+  font-size: 8.5pt;
+  line-height: 1.4;
+  text-align: left;
+  hyphens: none;
+  margin-top: 3.5in;             /* copyright sits low on the page, by convention */
+}
+
+.copyright p { text-indent: 0; margin-bottom: 6pt; }
+
+.epigraph {
+  page-break-before: right;
+  page-break-after: always;
+  margin: 2.5in 0.7in 0;
+  font-style: italic;
+  text-align: center;
+  font-size: 11pt;
+  line-height: 1.5;
+}
+
+.epigraph .attribution {
+  font-style: normal;
+  font-size: 9.5pt;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  margin-top: 14pt;
+}
+
+.dedication {
+  page-break-before: right;
+  page-break-after: always;
+  margin-top: 2.5in;
+  text-align: center;
+  font-style: italic;
+}
+
+/* --- Table of contents --------------------------------------------------- */
+
+#TOC, nav#TOC {
+  page-break-before: right;
+  page-break-after: always;
+  hyphens: none;
+}
+
+#TOC ul { list-style: none; margin: 0; padding: 0; }
+#TOC li { margin: 5pt 0; text-indent: 0; }
+#TOC ul ul { margin-left: 1.2em; font-size: 0.92em; }
+#TOC a { text-decoration: none; color: #000; }
+
+/* --- Scene and section breaks -------------------------------------------- */
+
+hr {
+  border: none;
+  text-align: center;
+  margin: 14pt 0;
+  page-break-after: avoid;
+}
+
+hr::after {
+  content: "◆";
+  display: block;
+  font-size: 8pt;
+  letter-spacing: 0.6em;
+  color: #444;
+}
+
+/* --- Quotes and lists ---------------------------------------------------- */
+
+blockquote {
+  margin: 12pt 0.4in;
+  font-size: 10pt;
+  line-height: 1.4;
+  font-style: italic;
+  page-break-inside: avoid;
+}
+
+blockquote p { text-indent: 0; }
+
+ul, ol {
+  margin: 10pt 0 10pt 0.35in;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 4pt;
+  text-indent: 0;
+  page-break-inside: avoid;
+}
+
+/* --- Tables and figures -------------------------------------------------- */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 9.5pt;
+  margin: 12pt 0;
+  page-break-inside: avoid;
+}
+
+th, td {
+  border-bottom: 0.5pt solid #999;
+  padding: 4pt 6pt;
+  text-align: left;
+  vertical-align: top;
+  hyphens: none;
+}
+
+th { font-variant: small-caps; letter-spacing: 0.05em; }
+
+img { max-width: 100%; page-break-inside: avoid; }
+
+figure { margin: 12pt 0; page-break-inside: avoid; text-align: center; }
+figcaption { font-size: 9pt; font-style: italic; margin-top: 4pt; }
+
+/* --- Journals and workbooks ---------------------------------------------- */
+/* Ruled write-in areas that survive a markdown→PDF path. For a real fill-in
+   journal, use a book-local export/build-interior.js instead — facing-page
+   spreads and fixed pagination cannot be expressed here. See CLAUDE.md §9.2. */
+
+.prompt {
+  text-indent: 0;
+  font-size: 12pt;
+  line-height: 1.35;
+  margin: 0 0 16pt;
+  page-break-after: avoid;
+  hyphens: none;
+}
+
+.prompt-number {
+  display: block;
+  font-size: 8.5pt;
+  font-variant: small-caps;
+  letter-spacing: 0.16em;
+  color: #666;
+  margin-bottom: 6pt;
+}
+
+.rules {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rules li {
+  border-bottom: 0.5pt solid #c8c2b8;
+  height: 26pt;
+  margin: 0;
+}
+
+.unit {
+  page-break-before: always;
+  page-break-inside: avoid;
+}
+
+/* --- Back matter --------------------------------------------------------- */
+
+.about-author, .also-by, .call-to-action, .backmatter {
+  page-break-before: right;
+}
+
+/* --- Utility ------------------------------------------------------------- */
+
+.center { text-align: center; text-indent: 0; }
+.right  { text-align: right;  text-indent: 0; }
+.small  { font-size: 9pt; }
+.page-break     { page-break-after: always; }
+.recto-break    { page-break-before: right; }
+.keep-together  { page-break-inside: avoid; }
+.no-hyphens     { hyphens: none; }
+
+/* Screen-only elements never reach paper. */
+.screen-only, nav.no-print { display: none; }

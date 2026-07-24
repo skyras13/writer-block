@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Book Factory</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📖</text></svg>" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">📖</span>
+    <span class="brand-name">Book&nbsp;Factory</span>
+  </div>
+  <nav class="crumbs" id="crumbs"></nav>
+  <div class="topbar-right">
+    <span class="tool-status" id="toolStatus" title="Export toolchain"></span>
+    <button class="btn ghost" id="themeToggle" title="Toggle theme">◐</button>
+  </div>
+</header>
+
+<main id="app">
+
+  <!-- ===================== LIBRARY ===================== -->
+  <section class="view" id="view-library">
+    <div class="view-head">
+      <div>
+        <h1>Library</h1>
+        <p class="sub" id="libraryCount">—</p>
+      </div>
+      <button class="btn primary" id="newBookBtn">+ New Book</button>
+    </div>
+
+    <div class="cards" id="bookCards"></div>
+
+    <details class="archive-block" id="archiveBlock" hidden>
+      <summary>Archived</summary>
+      <div class="cards compact" id="archivedCards"></div>
+    </details>
+
+    <div class="empty" id="libraryEmpty" hidden>
+      <h2>No books yet.</h2>
+      <p>Create one here, or kick one off in Claude Code with:</p>
+      <code class="kickoff">Start a new book: &lt;title&gt; / &lt;selfhelp|fiction&gt; / &lt;topic&gt;</code>
+    </div>
+  </section>
+
+  <!-- ===================== BOOK ===================== -->
+  <section class="view" id="view-book" hidden>
+
+    <div class="view-head">
+      <div>
+        <h1 id="bookTitle">—</h1>
+        <p class="sub"><span id="bookGenre"></span> · <span id="bookStats"></span></p>
+      </div>
+      <div class="head-actions">
+        <button class="btn ghost" id="backBtn">← Library</button>
+        <button class="btn ghost" id="manageBtn">Manage</button>
+      </div>
+    </div>
+
+    <!-- Pipeline tracker -->
+    <div class="stepper" id="stepper"></div>
+
+    <!-- Checkpoint controls -->
+    <div class="checkpoint" id="checkpoint" hidden>
+      <div class="checkpoint-head">
+        <span class="pulse"></span>
+        <div>
+          <strong id="cpTitle">Checkpoint</strong>
+          <p class="sub" id="cpDesc"></p>
+        </div>
+      </div>
+      <div class="checkpoint-files" id="cpFiles"></div>
+      <textarea id="cpComment" rows="3" placeholder="Comments — required when requesting changes, optional when approving."></textarea>
+      <div class="checkpoint-actions">
+        <button class="btn primary" id="approveBtn">✓ Approve</button>
+        <button class="btn warn" id="changesBtn">✎ Request changes</button>
+      </div>
+      <p class="handshake" id="handshakeNote">
+        Your decision is written to <code>decisions.json</code>. The UI never runs the agents —
+        return to Claude Code and say <strong>continue</strong>, and the Producer picks it up.
+      </p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-tab="manuscript">Manuscript</button>
+      <button class="tab" data-tab="research">Research &amp; Citations</button>
+      <button class="tab" data-tab="files">Files</button>
+      <button class="tab" data-tab="export">Export</button>
+      <button class="tab" data-tab="history">History</button>
+    </div>
+
+    <!-- --- Manuscript --- -->
+    <div class="panel" id="tab-manuscript">
+      <div class="reader-layout">
+        <aside class="chapter-nav">
+          <div class="nav-head">Chapters</div>
+          <ul id="chapterList"></ul>
+        </aside>
+
+        <div class="reader">
+          <div class="reader-toolbar">
+            <span class="reader-title" id="readerTitle">Select a chapter</span>
+            <span class="spacer"></span>
+            <span class="save-state" id="saveState"></span>
+            <button class="btn ghost small" id="modeToggle">Edit</button>
+            <button class="btn small" id="saveBtn" hidden>Save</button>
+          </div>
+          <article class="reading-view" id="readingView"></article>
+          <textarea class="editing-view" id="editingView" hidden spellcheck="true"></textarea>
+        </div>
+
+        <aside class="side-panels">
+          <details open>
+            <summary>QA report</summary>
+            <div class="side-body" id="sideQa">—</div>
+          </details>
+          <details>
+            <summary>Citations used</summary>
+            <div class="side-body" id="sideCites">—</div>
+          </details>
+          <details>
+            <summary>Voice spec</summary>
+            <div class="side-body" id="sideVoice">—</div>
+          </details>
+        </aside>
+      </div>
+    </div>
+
+    <!-- --- Research --- -->
+    <div class="panel" id="tab-research" hidden>
+      <div class="table-toolbar">
+        <input type="search" id="citeSearch" placeholder="Filter claims, sources, URLs…" />
+        <label class="checkline"><input type="checkbox" id="onlyUnverified" /> Unverified only</label>
+        <span class="spacer"></span>
+        <span class="sub" id="citeCount"></span>
+      </div>
+      <div class="table-wrap">
+        <table class="cites">
+          <thead>
+            <tr>
+              <th data-sort="id">ID</th>
+              <th data-sort="claim">Claim</th>
+              <th data-sort="source">Source</th>
+              <th data-sort="url">URL</th>
+              <th data-sort="date">Date</th>
+              <th data-sort="tier">Tier</th>
+              <th data-sort="confidence">Confidence</th>
+              <th data-sort="usedIn">Used in</th>
+            </tr>
+          </thead>
+          <tbody id="citeBody"></tbody>
+        </table>
+      </div>
+      <h3 class="section-h">Research dossier</h3>
+      <article class="reading-view dossier" id="dossierView">—</article>
+    </div>
+
+    <!-- --- Files --- -->
+    <div class="panel" id="tab-files" hidden>
+      <div class="reader-layout">
+        <aside class="chapter-nav wide">
+          <div class="nav-head">All files</div>
+          <div id="fileTree"></div>
+        </aside>
+        <div class="reader">
+          <div class="reader-toolbar">
+            <span class="reader-title" id="fileTitle">Select a file</span>
+            <span class="spacer"></span>
+            <span class="save-state" id="fileSaveState"></span>
+            <button class="btn small" id="fileSaveBtn" hidden>Save</button>
+          </div>
+          <textarea class="editing-view tall" id="fileEditor" spellcheck="false"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- --- Export --- -->
+    <div class="panel" id="tab-export" hidden>
+      <div class="export-grid">
+        <div class="export-card">
+          <h3>📖 Kindle ebook</h3>
+          <p class="sub">Reflowable EPUB — the primary Kindle upload. Styled by <code>epub.css</code>, with TOC and metadata. Validated after build.</p>
+          <button class="btn primary" data-export="epub">Export EPUB</button>
+        </div>
+        <div class="export-card">
+          <h3>📄 Word manuscript</h3>
+          <p class="sub">Clean DOCX. KDP accepts it for ebooks, and it's the format to hand a human editor.</p>
+          <button class="btn primary" data-export="docx">Export DOCX</button>
+        </div>
+        <div class="export-card">
+          <h3>🖨️ Paperback interior</h3>
+          <p class="sub">Print-ready PDF with mirrored margins, gutter, and running heads.</p>
+          <label class="inline-field">Trim
+            <select id="trimSelect">
+              <option value="6x9" selected>6 × 9</option>
+              <option value="5.5x8.5">5.5 × 8.5</option>
+              <option value="5x8">5 × 8</option>
+            </select>
+          </label>
+          <button class="btn primary" data-export="pdf">Export print PDF</button>
+        </div>
+        <div class="export-card">
+          <h3>🧾 Metadata pack</h3>
+          <p class="sub">Splits <code>metadata.md</code> into paste-ready <code>blurb.txt</code> and <code>keywords.txt</code>.</p>
+          <button class="btn primary" data-export="metadata">Export metadata</button>
+        </div>
+        <div class="export-card wide">
+          <h3>📦 Export all</h3>
+          <p class="sub">Runs every format, then zips <code>export/</code> for one-click download.</p>
+          <button class="btn primary" data-export="all">Export all &amp; zip</button>
+        </div>
+      </div>
+
+      <div class="export-log" id="exportLog" hidden></div>
+
+      <h3 class="section-h">Toolchain</h3>
+      <div class="tool-grid" id="toolGrid"></div>
+
+      <h3 class="section-h">Files in <code>export/</code></h3>
+      <ul class="file-list" id="exportFiles"></ul>
+
+      <h3 class="section-h">PUBLISH.md</h3>
+      <article class="reading-view" id="publishView">Not written yet — the Producer creates it in the export phase.</article>
+    </div>
+
+    <!-- --- History --- -->
+    <div class="panel" id="tab-history" hidden>
+      <pre class="history" id="historyView">—</pre>
+    </div>
+
+  </section>
+</main>
+
+<!-- ===================== MODALS ===================== -->
+
+<dialog id="newBookDialog" class="modal">
+  <form method="dialog" id="newBookForm">
+    <h2>New book</h2>
+    <p class="sub">This scaffolds the folder. Kick off the pipeline in Claude Code afterwards.</p>
+    <label>Title <input name="title" required autocomplete="off" placeholder="Tether" /></label>
+    <label>Subtitle <input name="subtitle" autocomplete="off" placeholder="optional" /></label>
+    <label>Genre
+      <select name="genre">
+        <option value="selfhelp">Self-help / how-to</option>
+        <option value="fiction">Realistic fiction</option>
+        <option value="journal">Journal / workbook</option>
+      </select>
+    </label>
+    <label>Topic or premise <textarea name="topic" rows="3" placeholder="A daily couples gratitude journal built on a write-apart, reveal-together ritual."></textarea></label>
+    <div class="modal-actions">
+      <button class="btn ghost" value="cancel">Cancel</button>
+      <button class="btn primary" value="create">Create</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="manageDialog" class="modal">
+  <h2>Manage book</h2>
+  <p class="sub">Every action here is a plain file operation. Nothing is ever hard-deleted.</p>
+  <div class="manage-list">
+    <button class="btn ghost" data-manage="rename">✎ Rename / retitle</button>
+    <button class="btn ghost" data-manage="duplicate">⧉ Duplicate structure &amp; voice</button>
+    <button class="btn ghost" data-manage="backup">📦 Export / backup (zip)</button>
+    <button class="btn ghost" data-manage="reveal">📂 Reveal in folder</button>
+    <button class="btn ghost" data-manage="archive">🗄 Archive</button>
+    <button class="btn danger" data-manage="delete">🗑 Move to trash</button>
+  </div>
+  <div class="modal-actions">
+    <button class="btn ghost" id="manageClose">Close</button>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+/* ---------------------------------------------------------------------------
+ * Book Factory — EPUB stylesheet
+ *
+ * Reflowable Kindle ebook styling. The guiding rule for ebooks is restraint: the
+ * reader's device and their own settings win. We set relative sizes only, never
+ * fix a font family the device may not have, and never set a background colour
+ * (it breaks dark mode on Kindle).
+ * ------------------------------------------------------------------------- */
+
+/* --- Base ---------------------------------------------------------------- */
+
+body {
+  /* No font-family: let the reader's chosen font apply. No margin: the device
+     supplies it, and doubling up wastes screen on a phone. */
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+  text-align: left;         /* justified text on small screens creates rivers */
+  widows: 2;
+  orphans: 2;
+}
+
+p {
+  margin: 0;
+  text-indent: 1.2em;       /* indent-first-line convention for prose */
+  line-height: 1.5;
+}
+
+/* First paragraph after a heading or break is not indented. */
+h1 + p, h2 + p, h3 + p, h4 + p,
+hr + p,
+.no-indent,
+p.first {
+  text-indent: 0;
+}
+
+/* --- Headings ------------------------------------------------------------ */
+
+h1, h2, h3, h4 {
+  font-weight: normal;
+  text-align: left;
+  page-break-after: avoid;
+  -webkit-hyphens: none;
+  hyphens: none;
+}
+
+h1 {                        /* chapter openers */
+  font-size: 1.6em;
+  margin: 2em 0 1.2em;
+  page-break-before: always;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.25em;
+  margin: 1.8em 0 0.6em;
+}
+
+h3 {
+  font-size: 1.1em;
+  font-style: italic;
+  margin: 1.5em 0 0.4em;
+}
+
+h4 {
+  font-size: 1em;
+  font-weight: bold;
+  margin: 1.2em 0 0.3em;
+}
+
+/* --- Front matter -------------------------------------------------------- */
+
+.titlepage {
+  text-align: center;
+  margin-top: 20%;
+  page-break-after: always;
+}
+
+.titlepage h1 {
+  page-break-before: avoid;
+  font-size: 2em;
+  margin-bottom: 0.3em;
+}
+
+.subtitle {
+  font-size: 1.1em;
+  font-style: italic;
+  margin-bottom: 3em;
+}
+
+.author {
+  font-size: 1.1em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.copyright {
+  font-size: 0.85em;
+  text-align: left;
+  page-break-after: always;
+}
+
+.copyright p { text-indent: 0; margin-bottom: 0.6em; }
+
+.epigraph {
+  margin: 25% 12% 0;
+  font-style: italic;
+  text-align: center;
+  page-break-after: always;
+}
+
+.dedication {
+  margin-top: 25%;
+  text-align: center;
+  font-style: italic;
+  page-break-after: always;
+}
+
+/* --- Scene and section breaks -------------------------------------------- */
+
+hr {
+  border: none;
+  text-align: center;
+  margin: 1.5em auto;
+  width: 100%;
+}
+
+hr::after {
+  content: "◆";             /* an ornament survives conversion better than a rule */
+  display: block;
+  font-size: 0.8em;
+  letter-spacing: 0.5em;
+  opacity: 0.6;
+}
+
+.break {
+  text-align: center;
+  margin: 1.5em 0;
+}
+
+/* --- Quotes and lists ---------------------------------------------------- */
+
+blockquote {
+  margin: 1.2em 1.5em;
+  font-style: italic;
+}
+
+blockquote p { text-indent: 0; }
+
+ul, ol {
+  margin: 1em 0 1em 1.5em;
+  padding: 0;
+}
+
+li { margin-bottom: 0.4em; }
+
+/* --- Journals and workbooks ---------------------------------------------- */
+
+.prompt {
+  margin: 1.4em 0;
+  text-indent: 0;
+  font-size: 1.05em;
+}
+
+.prompt-number {
+  font-size: 0.8em;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.65;
+  display: block;
+  margin-bottom: 0.3em;
+}
+
+.write-space {
+  /* Ebooks cannot offer real write-in space; point the reader at the paperback
+     rather than shipping meaningless blank lines that reflow into nonsense. */
+  margin: 1em 0;
+  font-size: 0.85em;
+  font-style: italic;
+  opacity: 0.7;
+  text-indent: 0;
+}
+
+/* --- Back matter --------------------------------------------------------- */
+
+.about-author, .also-by, .call-to-action {
+  page-break-before: always;
+}
+
+/* --- Notes and citations -------------------------------------------------- */
+
+.notes { font-size: 0.9em; }
+.notes p { text-indent: 0; margin-bottom: 0.5em; }
+
+sup { font-size: 0.7em; line-height: 0; vertical-align: super; }
+
+a { text-decoration: none; }
+
+/* --- Utility ------------------------------------------------------------- */
+
+.center { text-align: center; text-indent: 0; }
+.right { text-align: right; text-indent: 0; }
+.small { font-size: 0.85em; }
+.page-break { page-break-after: always; }
+.keep-together { page-break-inside: avoid; }

@@ -1,0 +1,24 @@
+{
+  "generated": "2026-07-24T21:04:56.877Z",
+  "note": "Cache. books/ is the source of truth — this file is rebuilt by scanning it.",
+  "books": [
+    {
+      "slug": "tether",
+      "title": "Tether",
+      "subtitle": "A Couples Gratitude Journal for Noticing Why",
+      "genre": "journal",
+      "topic": "A daily couples gratitude journal built on a write-apart, reveal-together ritual, arranged as a 13-week thematic arc across 90 days.",
+      "phase": "export",
+      "percent": 88,
+      "status": "active",
+      "chapterCount": 15,
+      "qaPassed": 1,
+      "wordCount": 2790,
+      "currentCheckpoint": "export",
+      "awaitingApproval": true,
+      "created": "2026-07-24T00:00:00.000Z",
+      "updated": "2026-07-24T00:00:00.000Z"
+    }
+  ],
+  "archived": []
+}

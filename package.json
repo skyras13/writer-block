@@ -1,0 +1,17 @@
+{
+  "name": "book-factory",
+  "version": "1.0.0",
+  "description": "Book Factory — reusable pipeline for producing publication-quality books for KDP.",
+  "scripts": {
+    "start": "cd app && npm start",
+    "doctor": "node app/export/build.js --doctor"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pdfkit": "^0.19.1"
+  },
+  "type": "module",
+  "private": true
+}

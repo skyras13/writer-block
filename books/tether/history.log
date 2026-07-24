@@ -1,0 +1,23 @@
+2026-07-24T00:00:00.000Z  KICKOFF  "Tether" (journal) — A daily couples gratitude journal built on a write-apart, reveal-together ritual
+2026-07-24T00:01:00.000Z  PHASE    market -> Market Scout: bestseller scan (8 titles + free-worksheet layer), niche map (10 pockets), recommendation, originality clearance
+2026-07-24T00:01:30.000Z  FLAG     Amazon product pages return HTTP 500 to automated requests — prices/ratings/review counts left UNVERIFIED, not estimated
+2026-07-24T00:02:00.000Z  DECISION market -> approved (niche pre-selected in Appendix A)
+2026-07-24T00:02:30.000Z  PHASE    brief -> Producer drafted book brief
+2026-07-24T00:03:00.000Z  DECISION brief -> approved
+2026-07-24T00:03:30.000Z  PHASE    voice -> Voice Architect wrote voice spec with 3 gold-standard samples and 5 failure modes
+2026-07-24T00:04:00.000Z  DECISION voice -> approved
+2026-07-24T00:04:30.000Z  PHASE    research -> Researcher logged 5 citations (3 used in the book), all primary
+2026-07-24T00:04:45.000Z  CUT      Gottman "86% vs 33%" bids statistic — no primary source locatable; laundered number
+2026-07-24T00:04:50.000Z  CUT      "77% still dating" figure attached to [C-003] — not in the abstract, full text paywalled
+2026-07-24T00:05:00.000Z  DECISION research -> approved
+2026-07-24T00:05:30.000Z  PHASE    outline -> Storyboarder built the 13-theme content map; repetition audit clean (1 pair flagged)
+2026-07-24T00:06:00.000Z  DECISION outline -> approved
+2026-07-24T00:06:30.000Z  PHASE    drafting -> front matter, 13 week files (90 prompts), back matter
+2026-07-24T00:07:00.000Z  DECISION drafting -> approved
+2026-07-24T00:07:30.000Z  PHASE    qa -> full-manuscript QA: PASS (notes), 0 blocking, 2 non-blocking
+2026-07-24T00:07:45.000Z  FINDING  B1 non-blocking: prompts 85-89 all open with "What" — author-specified text, flagged not overruled
+2026-07-24T00:08:00.000Z  DECISION qa -> approved
+2026-07-24T00:08:30.000Z  PHASE    export -> interior generator built book-6x9.pdf: 222 pages, 90/90 spreads correct, 0 parity errors
+2026-07-24T00:08:45.000Z  EXPORT   metadata pack: metadata.md, blurb.txt, keywords.txt
+2026-07-24T00:09:00.000Z  EXPORT   PUBLISH.md written — 4 pre-upload items flagged (font license, author name, pricing, gutter check)
+2026-07-24T00:09:30.000Z  AWAIT    checkpoint: export — final review
