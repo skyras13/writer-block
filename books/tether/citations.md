@@ -8,6 +8,21 @@
 
 ---
 
+## Provenance note
+
+**These five entries were gathered by the factory on 2026-07-24, before the
+author-supplies-sources policy took effect** (`CLAUDE.md` §0.2). Under the current rules the
+Producer would have stopped and asked for material rather than going to find it.
+
+They stand as-is: each was opened and checked against the source itself, not against a summary of
+it, and two widely-repeated figures were cut for being untraceable to a primary source. The
+`Supplied by` field required on new entries is therefore absent here — read it as
+`factory-sourced (pre-policy)` throughout.
+
+`research/source-material/` is empty for this book for the same reason.
+
+---
+
 ## Scope note
 
 Tether is a fill-in journal. The prompts themselves make no factual claims — they ask questions.

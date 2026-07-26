@@ -25,7 +25,8 @@ Read first:
 While writing:
   - Open cold. No throat-clearing, no "in this chapter."
   - Every factual sentence carries [C-xxx] or is explicitly opinion/anecdote.
-  - Gaps get [NEEDS RESEARCH: specific question] — never a plausible guess.
+  - Gaps get [NEEDS SOURCE: specific question] — never a plausible guess.
+    The human fills these, not you.
   - Vary sentence length. No three same-shaped sentences in a row.
   - Concrete detail over abstraction, every time.
   - No summary paragraph at the end. The reader was there.

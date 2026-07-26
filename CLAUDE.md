@@ -18,33 +18,50 @@ The bar is "genuinely worth the reader's time," not "done." A chapter that is st
 but boring has failed. Concrete detail beats abstraction. A real point of view beats balanced
 mush. Cut anything that exists only to fill space.
 
-### 0.2 Cited and verified research is mandatory
-Every factual claim, statistic, study, quote, historical detail, technical procedure, or named
-reference must trace to a real, web-searched source logged in `books/<slug>/citations.md`.
+### 0.2 The factory does not do topic research — the human does
+**This is a deliberate division of labour.** The factory researches *niches* (Market Scout) and
+writes; the human supplies the *subject-matter* material.
+
+- The Producer **does not** dispatch an agent to go discover facts about the topic.
+- The human drops source material into `books/<slug>/research/source-material/` — papers, PDFs,
+  links, notes, transcripts, their own expertise written out longhand, anything.
+- The **Researcher's job is narrow:** read what the human supplied, verify the citation details are
+  real and correctly stated, log entries in `citations.md`, and report what the outline needs that
+  the supplied material doesn't cover. It is a fact-checker and a librarian, not a discoverer.
+- If the human supplies nothing, the phase is **skipped** and the book asserts no facts.
+
+### 0.3 No invented facts. Ever.
+This rule is unchanged by §0.2 and is not negotiable, because it is the rule that protects the human
+from the factory quietly fabricating a plausible-looking study.
 
 - **Never invent a source.** Not a URL, not a study, not a statistic, not an author, not a date.
-- If a source cannot be found, the claim is **softened to opinion/anecdote or cut**. There is no
-  third option.
+- Every factual claim, statistic, study, quote, historical detail, technical procedure, or named
+  reference must trace to an entry in `books/<slug>/citations.md`.
+- **A claim with no source in hand is softened to explicitly-marked opinion, or cut.** There is no
+  third option, and "the human probably knows this is true" is not a source.
 - Unsupported factual claims are rejected by QA. A failed citation audit blocks the chapter.
-- Fiction is not exempt: authenticity details (procedure, geography, period, profession) are
-  researched and logged the same way.
+- Fiction is not exempt: authenticity details (procedure, geography, period, profession) either come
+  from supplied material or the scene is written to avoid asserting them.
+- When the Writer needs something it doesn't have, it marks `[NEEDS SOURCE: …]` and keeps going.
+  Those markers surface to the human as a shopping list at the next checkpoint — **the factory never
+  fills them itself.**
 
-### 0.3 Human-in-the-loop checkpoints
+### 0.4 Human-in-the-loop checkpoints
 After each major phase the Producer **stops**, writes its output to disk, and presents a concise
 summary for approval. It does not spend tokens on the next phase until approval is recorded.
 Checkpoints are listed in §2.
 
-### 0.4 Iteration loops are explicit
+### 0.5 Iteration loops are explicit
 Writer → Editor → QA repeats on a single chapter until QA passes. Nothing advances on a failed
 gate. After **two** failed QA loops on the same chapter, the Producer stops and escalates to the
 human with a specific diagnosis of what is stuck.
 
-### 0.5 Everything is a file
+### 0.6 Everything is a file
 Briefs, voice specs, research, outlines, drafts, citations, QA reports, decisions, and history are
 all plain files on disk. No database. No hidden state. If it matters, it is written down and
 diffable in git.
 
-### 0.6 Originality
+### 0.7 Originality
 We produce original work. We may learn from, cite, and differentiate against existing books; we
 never reproduce another author's prompts, exercise lists, chapter structure, framework names, or
 phrasing. Every book carries a `market/originality.md` that QA re-checks against.
@@ -118,9 +135,11 @@ books/<slug>/
 3. Voice Architect proposes VOICE SPEC
       ──► CHECKPOINT 3: human approves voice
       ↓
-4. Researcher builds dossier + citations.md
-      ──► CHECKPOINT 4: human reviews research
-      ↓
+4. SOURCES (conditional — see §2.2)
+      Human drops material into research/source-material/
+      Researcher verifies it and logs citations.md
+      ──► CHECKPOINT 4: human reviews what's covered and what isn't
+      ↓  (auto-skipped when the book asserts no facts)
 5. Storyboarder builds OUTLINE (branch: fiction vs self-help)
       ──► CHECKPOINT 5: human approves outline
       ↓
@@ -144,12 +163,51 @@ Used in `library.json`, `meta.json`, and the UI stepper:
 | `market` | Market Scout | niche selected |
 | `brief` | Book Brief | brief approved |
 | `voice` | Voice Spec | voice approved |
-| `research` | Research + citations | research reviewed |
+| `research` | Sources + citations (**conditional**) | supplied material logged, gaps reported — or explicitly skipped |
 | `outline` | Outline / storyboard | outline approved |
 | `drafting` | Writer↔Editor↔QA per chapter | all chapters QA-pass |
 | `qa` | Full-manuscript QA | final QA pass |
 | `export` | KDP assembly | final review |
 | `done` | Published-ready | — |
+
+### 2.2 The sources phase — when it runs and when it doesn't
+
+The factory does not go looking for subject-matter facts (§0.2). The `research` phase exists as the
+place the human's material lands and gets checked.
+
+**Decision the Producer makes after the voice checkpoint:**
+
+```
+Does the outline-to-be require any factual assertion?
+  (a statistic, a study, a named person, a date, a procedure, a quote,
+   a technical claim, a period or professional detail)
+        │
+        ├── NO  → set decisions.json verdict "skipped" for `research`,
+        │         append SKIP to history.log, advance straight to `outline`.
+        │         Journals, prompt books, workbooks, and most fiction land here.
+        │
+        └── YES → check books/<slug>/research/source-material/
+                    │
+                    ├── has files → dispatch the Researcher to verify and log them,
+                    │               then report coverage gaps at the checkpoint
+                    │
+                    └── empty     → STOP. Tell the human exactly what the book will
+                                    need to assert, and ask for material. Do not
+                                    invent it, and do not go find it.
+```
+
+**The Researcher's charter in this mode** (see `.claude/agents/researcher.md`):
+- Read every file in `research/source-material/`.
+- Verify each citation's details are real and correctly stated. Fetching a supplied URL to confirm
+  it says what it's claimed to say is verification, not discovery — that is in scope and expected.
+- Log entries in `citations.md` with tier, date, and confidence.
+- Write `research/coverage.md`: what the book needs, what the supplied material covers, and **what
+  it doesn't.** The gap list is the deliverable the human actually acts on.
+- **Never add a source the human didn't supply.**
+
+**`[NEEDS SOURCE: …]` markers** are the Writer's mechanism for a gap found mid-draft. They collect
+into the section checkpoint as a numbered shopping list. The human either supplies the source, or
+tells the Producer to soften/cut the claim. The factory never resolves one itself.
 
 ---
 
@@ -230,7 +288,7 @@ A phase advances only when its gate passes.
 | Market | `market/recommendation.md` names one niche + persona, and `market/originality.md` exists with an explicit clearance verdict |
 | Brief | promise, reader, transformation, scope, length, and success criteria are all concrete (no placeholders) |
 | Voice | spec includes POV/tense, reading level, cadence rules, embrace/ban lists, comps, and 3 gold-standard sample paragraphs |
-| Research | every outline claim has a `citations.md` entry; unverifiable items are explicitly flagged |
+| Sources | **either** explicitly skipped (book asserts no facts), **or** every supplied source logged in `citations.md` with `research/coverage.md` listing the gaps |
 | Outline | every chapter has its required fields for the branch (see `templates/outline-*.md`) |
 | Chapter | QA report verdict is `PASS` on all six rubric dimensions |
 | Manuscript | full-manuscript QA `PASS` + citation audit clean + originality sweep clean |
@@ -243,28 +301,39 @@ ask the human. Do not attempt a third silent loop.
 
 ---
 
-## 6. Research & citation rules
+## 6. Source & citation rules
 
-Binding on the Researcher, the Writer, and QA.
+Binding on the Researcher, the Writer, and QA. Read alongside §0.2 and §2.2 — **the factory does
+not go find sources.** These rules govern what happens to the ones the human supplies.
 
-1. **Prefer primary and authoritative sources.** Peer-reviewed study > institutional report >
-   quality journalism > blog. Record what tier each source is.
-2. **Record publication date** on every entry. Flag anything older than ~10 years where currency
-   matters (health, tech, economics, law, statistics).
-3. **Cross-check surprising or high-stakes numbers against a second independent source.** If the
-   second source disagrees, log both and present the disagreement rather than picking one.
-4. `citations.md` is the single source of truth. Every entry has a stable ID (`[C-014]`).
-5. **Inline citation format in drafts:** `... roughly a third of couples report this [C-014].`
-   Entry IDs are never reused or renumbered.
-6. **QA runs a citation audit.** Any sentence stating a fact without a traceable entry is flagged
+1. **Sources come from the human.** The Researcher logs and verifies `research/source-material/`.
+   It never adds a source the human didn't provide.
+2. **Verification is in scope; discovery is not.** Opening a supplied URL to confirm it says what
+   it's claimed to say, and to pull the exact author/date/volume, is the Researcher's core job.
+   Searching for a source the human didn't give is not.
+3. **Record tier and publication date** on every entry. Prefer primary
+   (peer-reviewed study > institutional report > quality journalism > blog) and note which it is.
+   Flag anything older than ~10 years where currency matters (health, tech, economics, law, stats).
+4. **A supplied claim still has to check out.** If the human's note says "studies show X" with no
+   study attached, that is a gap, not a citation. Log it in `coverage.md` and ask.
+5. **Flag misstatements without softening them.** If the supplied source says "12% in one small
+   study" and the note says "most people," say so plainly at the checkpoint. Being the human's
+   fact-checker is the job; deferring to them on a misread source is a failure at it.
+6. `citations.md` is the single source of truth. Every entry has a stable ID (`[C-014]`), and IDs
+   are never reused or renumbered.
+7. **Inline citation format in drafts:** `... roughly a third of couples report this [C-014].`
+8. **QA runs a citation audit.** Any sentence stating a fact without a traceable entry is flagged
    and must be sourced, softened to explicit opinion, or cut. No exceptions.
-7. **Three registers, clearly distinguished in prose:**
+9. **Three registers, clearly distinguished in prose:**
    - *Verified fact* — cited.
    - *Argued opinion* — marked as the author's position ("I think," "my read is").
    - *Illustrative anecdote* — marked as illustrative; composite examples must be labeled as
      composites, never presented as a real named case.
-8. The Writer marks any gap as `[NEEDS RESEARCH: <specific question>]` and moves on. It never
-   guesses to fill a hole.
+   The human's own expertise, supplied as notes, is **opinion or anecdote** unless it comes with a
+   source. That's not a demotion — a book with a strong argued point of view is better than one
+   padded with borrowed citations. It just has to be framed as the author speaking.
+10. The Writer marks any gap as `[NEEDS SOURCE: <specific question>]` and moves on. It never
+    guesses to fill a hole, and it never resolves its own marker.
 
 ---
 
@@ -372,14 +441,15 @@ the ebook vs. the paperback and the recommended KDP settings.
 |-------|------|-----------|--------|
 | Producer | `.claude/agents/producer.md` | always (orchestrator) | `meta.json`, `history.log`, `PUBLISH.md` |
 | Market Scout | `.claude/agents/market-scout.md` | phase `market` | `market/*` |
-| Researcher | `.claude/agents/researcher.md` | phase `research`, and on `[NEEDS RESEARCH]` | `research/*`, `citations.md` |
+| Researcher | `.claude/agents/researcher.md` | phase `research` — **only if the human supplied material** | `citations.md`, `research/coverage.md` |
 | Voice Architect | `.claude/agents/voice-architect.md` | phase `voice` | `voice-spec.md` |
 | Storyboarder | `.claude/agents/storyboarder.md` | phase `outline` | `outline.md` |
 | Writer | `.claude/agents/writer.md` | phase `drafting` | `manuscript/*` |
 | Editor | `.claude/agents/editor.md` | phase `drafting` | `manuscript/*` + changelog |
 | QA | `.claude/agents/qa.md` | phase `drafting`, `qa` | `qa/*` |
 
-The Producer never writes prose. The Writer never invents facts. QA never approves its own fixes.
+The Producer never writes prose. The Writer never invents facts. The Researcher never adds a source
+the human didn't supply. QA never approves its own fixes.
 
 ---
 

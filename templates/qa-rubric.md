@@ -17,6 +17,8 @@ Go **sentence by sentence** through everything that asserts a fact.
 - [ ] The entry actually supports **this** sentence **at this strength**
       *(watch for drift: "12% in one small study" ≠ "research shows most people")*
 - [ ] No `UNVERIFIED` entry is used to support a bare factual claim
+- [ ] No open `[NEEDS SOURCE: …]` markers remain unresolved by an author ruling
+- [ ] Every entry has a `Supplied by` line — nothing was added that the author didn't provide
 - [ ] No numbers without a source
 - [ ] No "studies show" / "experts agree" without a named study or expert
 - [ ] No historical, medical, legal, or technical claim without a citation
@@ -26,8 +28,9 @@ Go **sentence by sentence** through everything that asserts a fact.
 - [ ] Composite examples are labeled as composites
 - [ ] No invented reviews, endorsements, or awards
 
-**Every finding here is blocking.** Required fix is one of: source it · soften to explicitly-marked
-opinion · cut. There is no fourth option.
+**Every finding here is blocking.** Required fix is one of: the author supplies a source · soften to
+explicitly-marked opinion · cut. There is no fourth option, and **the factory never closes one by
+going to find a source itself.**
 
 ---
 

@@ -67,8 +67,9 @@ what the sentence claims it says. Every factual-sounding sentence has an ID or i
 as opinion/anecdote. Flag violations for QA — don't quietly delete the claim, because sometimes the
 right fix is research, not deletion.
 
-**Never resolve a `[NEEDS RESEARCH]` marker yourself.** If one reached you, stop and tell the
-Producer — the Researcher owes an answer first.
+**Never resolve a `[NEEDS SOURCE]` marker yourself.** If one reached you, stop and tell the
+Producer. Only the human can close it — by supplying a source, or by ruling that the claim gets
+softened to opinion or cut.
 
 ## The cut test
 

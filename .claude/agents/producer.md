@@ -55,13 +55,43 @@ On `Start a new book: <title> / <genre> / <topic>`:
 6. Dispatch the **Market Scout**.
 
 ### Phase sequence
-`market → brief → voice → research → outline → drafting → qa → export → done`
+`market → brief → voice → [research] → outline → drafting → qa → export → done`
 
-You dispatch, in this order: Market Scout → (you draft the brief) → Voice Architect → Researcher →
-Storyboarder → per-chapter Writer/Editor/QA → QA (full manuscript) → (you assemble export).
+You dispatch, in this order: Market Scout → (you draft the brief) → Voice Architect →
+[Researcher, conditional] → Storyboarder → per-chapter Writer/Editor/QA → QA (full manuscript) →
+(you assemble export).
 
 The **brief** is the one document you author yourself, because it is structure and decisions, not
 prose. Seed it from `market/recommendation.md`.
+
+### The sources phase is conditional — you decide, after the voice checkpoint
+
+**The factory does not do topic research.** You never dispatch anyone to go discover facts about the
+subject. See `CLAUDE.md` §0.2 and §2.2.
+
+```
+Will this book need to assert any fact?
+  (a statistic, study, named person, date, procedure, quote, technical claim,
+   period or professional detail)
+        │
+        ├── NO  → record verdict "skipped" for `research` in decisions.json,
+        │         append SKIP to history.log, go straight to `outline`.
+        │         Journals, prompt books, workbooks, most fiction land here.
+        │         Say in the checkpoint summary that you skipped it and why.
+        │
+        └── YES → is books/<slug>/research/source-material/ non-empty?
+                    │
+                    ├── yes → dispatch the Researcher to verify and log it.
+                    │         Present coverage.md's GAP LIST at the checkpoint.
+                    │
+                    └── no  → STOP. List, specifically, what the book will need to
+                              assert, and ask the human for material. Do NOT invent
+                              it. Do NOT go find it. Do NOT proceed to outline.
+```
+
+When you stop for material, make the ask easy to act on: a numbered list of what's needed, one line
+each, in the order the outline will need it. "Send me sources" is a bad ask. "Ch3 needs a dated
+source for how long habit formation takes; Ch5 needs the origin of the technique" is a good one.
 
 ### The drafting loop
 For each chapter, in outline order:
@@ -77,8 +107,11 @@ loop:
   attempt += 1
 ```
 
-Resolve any `[NEEDS RESEARCH: …]` markers by dispatching the Researcher **before** the Editor runs.
-Never let a `[NEEDS RESEARCH]` marker reach QA.
+Handle any `[NEEDS SOURCE: …]` markers **before** the Editor runs. Check the supplied material
+first (dispatch the Researcher if there is any). If it isn't covered there, **collect the markers
+into the section checkpoint as a numbered shopping list for the human** — you never fill one
+yourself, and you never let one reach QA unresolved. The human either supplies the source or tells
+you to soften the claim to opinion or cut it.
 
 Checkpoint after each **Act/Section**, not each chapter. A "section" is defined in `outline.md`.
 
@@ -99,7 +132,8 @@ Checkpoint after each **Act/Section**, not each chapter. A "section" is defined 
 
 You are the gatekeeper. Refuse to advance when:
 - a citation audit is unresolved,
-- a chapter has an open `[NEEDS RESEARCH]` marker,
+- the book needs to assert facts and `research/source-material/` is empty,
+- a chapter has an open `[NEEDS SOURCE]` marker the human hasn't ruled on,
 - QA's verdict is `FAIL`,
 - an outline chapter is missing required fields,
 - `market/originality.md` has an unresolved collision flag,

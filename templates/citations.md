@@ -15,16 +15,26 @@
 
 ## Rules (binding)
 
-1. **Never invent a source.** Not a URL, study, author, journal, date, or number. If it can't be
-   verified, the claim is softened to explicitly-marked opinion or cut.
-2. **Open the source.** A search snippet is not verification.
-3. **Record the publication date.** Flag anything older than ~10 years where currency matters.
-4. **Cross-check surprising or high-stakes numbers** against a second *independent* source.
-   Three articles citing one study is one source.
-5. **Trace to origin.** If an article cites a study, cite the study.
-6. **Disagreeing sources:** log both, note the disagreement, let the prose present it as contested.
-7. **Laundered numbers** — widely repeated, no traceable origin — are marked `UNVERIFIED` no matter
-   how often they appear.
+**The factory does not go find sources — you do.** Drop material into
+`research/source-material/`, and the Researcher verifies it, logs it here, and reports the gaps in
+`research/coverage.md`. See `CLAUDE.md` §0.2 and §2.2.
+
+1. **Never invent a source.** Not a URL, study, author, journal, date, or number. This is the rule
+   that stops the factory fabricating a plausible-looking citation.
+2. **Never add a source the human didn't supply.** Every entry carries a `Supplied by` line so the
+   provenance is auditable.
+3. **Open the source.** A filename or a pasted title is not verification. Fetching a *supplied* URL
+   to confirm it says what it's claimed to say is exactly the job.
+4. **Check the claim against the source, at strength.** A source saying "12% in one small study"
+   cannot support "most people." Strength drift is the most common and most damaging error here.
+5. **Record tier and publication date.** Flag anything older than ~10 years where currency matters.
+6. **Trace to origin.** If a supplied article cites a study, the citation is the study.
+7. **Disagreeing sources:** log both, note the disagreement, let the prose present it as contested.
+8. **Laundered numbers** — widely repeated, no traceable origin in the supplied material — are
+   marked `UNVERIFIED` no matter how famous.
+9. **A claim with no source is softened to explicitly-marked opinion, or cut.** There is no third
+   option. The author's own expertise, supplied as notes, is opinion unless a source comes with it —
+   which is fine, it just has to read as the author speaking.
 
 ## Confidence scale
 | value | meaning |
@@ -49,6 +59,7 @@
 - **Date:** YYYY-MM-DD
 - **URL:**
 - **Tier:** primary
+- **Supplied by:** human — `source-material/<filename>`
 - **Accessed:** YYYY-MM-DD
 - **Confidence:** high — reason
 - **Cross-check:** [C-00x], or "not required — not surprising or high-stakes"
@@ -66,11 +77,20 @@
 
 ## Unverified / flagged
 
-Claims that could **not** be verified. These cannot appear as bare facts in the manuscript.
+Claims that could **not** be verified against the supplied material. These cannot appear as bare
+facts in the manuscript.
 
 | id | claim | why it failed | disposition |
 |----|-------|---------------|-------------|
-| | | | soften / cut / pending |
+| | | | soften / cut / awaiting a source from the author |
+
+## Gaps — open asks to the author
+
+Mirrors `research/coverage.md`. What the book needs to assert that no supplied source covers.
+
+| # | ch | what's needed | status |
+|---|----|---------------|--------|
+| 1 | | | open / supplied / softened / cut |
 
 ---
 

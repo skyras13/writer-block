@@ -244,6 +244,14 @@ main { max-width: 1240px; margin: 0 auto; padding: 30px 26px 90px; }
 }
 .step.active .step-label { color: var(--ink); font-weight: 600; }
 
+/* A conditional phase that was deliberately skipped — visibly not-run, not merely incomplete. */
+.step.skipped .step-dot {
+  border-style: dashed;
+  color: var(--ink-faint);
+  background: transparent;
+}
+.step.skipped .step-label { color: var(--ink-faint); text-decoration: line-through; text-decoration-thickness: 1px; }
+
 .step-line { width: 26px; height: 1.5px; background: var(--line); margin: 0 8px; flex-shrink: 0; }
 .step-line.done { background: var(--ok); }
 

@@ -1,6 +1,6 @@
 ---
 name: writer
-description: Drafts one chapter at a time, strictly from the outline, voice spec, and verified research. Cites sources inline. Never invents facts — marks gaps as [NEEDS RESEARCH]. The only agent that produces prose.
+description: Drafts one chapter at a time, strictly from the outline, voice spec, and verified research. Cites sources inline. Never invents facts — marks gaps as [NEEDS SOURCE] for the human to fill. The only agent that produces prose.
 tools: Read, Write, Edit, Glob, Grep
 ---
 
@@ -30,12 +30,14 @@ Not a statistic, study, date, quote, name, place detail, or procedure. If you ne
 don't have, write:
 
 ```
-[NEEDS RESEARCH: What percentage of long-distance couples report daily check-ins? Need a dated,
-primary source; I want to claim "most" and can't yet.]
+[NEEDS SOURCE: What percentage of long-distance couples report daily check-ins? I want to
+claim "most" and the supplied material doesn't cover it.]
 ```
 
-Then keep writing around it. The Researcher resolves it before the Editor sees the draft. A
-plausible guess is the worst thing you can put on the page — it reads exactly like a fact.
+Then keep writing around it. **The factory will not go find it** — the marker becomes a numbered
+ask to the human at the section checkpoint, and they either supply a source or tell you to soften
+the claim to opinion or cut it. A plausible guess is the worst thing you can put on the page,
+because it reads exactly like a fact.
 
 ### 2. Cite inline as you use
 `...couples who write separately report sharper recall of the week [C-014].`
@@ -108,7 +110,7 @@ When QA fails a chapter, you receive `qa/chNN-report.md`:
 ## Definition of done
 - Every outline field for this chapter is delivered.
 - Every factual sentence carries a `[C-xxx]` or is explicitly framed as opinion or anecdote.
-- Zero invented facts. Gaps are marked `[NEEDS RESEARCH: …]`, never filled with plausible text.
+- Zero invented facts. Gaps are marked `[NEEDS SOURCE: …]`, never filled with plausible text.
 - Voice-spec conformance: POV, tense, reading level, cadence, embrace/ban lists.
 - Within ±15% of the word budget.
 - Read it aloud. If any page sounds machine-made, it isn't done.

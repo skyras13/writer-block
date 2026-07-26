@@ -86,7 +86,8 @@ Start a new book: <title> / <genre> / <topic>
 1. Market Scout       bestseller scan · niche map · originality clearance   ──► you pick the niche
 2. Producer           book brief, seeded by the chosen niche                ──► you approve
 3. Voice Architect    voice spec + 3 gold-standard sample paragraphs        ──► you approve
-4. Researcher         dossier + citations.md (every claim sourced)          ──► you review
+4. [Sources]          YOU supply material → Researcher verifies + logs it   ──► you review the gaps
+                      (skipped entirely when the book asserts no facts)
 5. Storyboarder       outline / storyboard / content map                    ──► you approve
 6. Writer→Editor→QA   per chapter, looping until QA passes                  ──► you approve each section
 7. QA                 full-manuscript pass: arc, citations, originality
@@ -102,10 +103,10 @@ diagnosis instead of silently trying a third time.
 |-------|--------------|
 | **Producer** | Orchestrates. Enforces gates, runs the drafting loop, surfaces checkpoints. Never writes prose. |
 | **Market Scout** | Finds the underserved pocket to compete in, and clears the concept for originality. |
-| **Researcher** | Web-searches and verifies every fact. Owns `citations.md`. Never invents a source. |
+| **Researcher** | Fact-checks the material **you** supply, logs `citations.md`, and reports the gaps. Never goes hunting, never adds a source you didn't give it. |
 | **Voice Architect** | Writes the binding voice contract — POV, cadence, diction, ban lists, samples. |
 | **Storyboarder** | Builds the skeleton — argument architecture, scene map, or content map. |
-| **Writer** | Drafts one chapter at a time from the outline. Marks gaps `[NEEDS RESEARCH]` rather than guessing. |
+| **Writer** | Drafts one chapter at a time from the outline. Marks gaps `[NEEDS SOURCE]` for you rather than guessing. |
 | **Editor** | Developmental + line edit. Strips AI tells and filler. Doesn't approve. |
 | **QA** | The gate. Six-dimension rubric. Defaults to FAIL. |
 
@@ -116,9 +117,20 @@ change how the factory behaves.
 
 ## What the factory guarantees
 
-**Every factual claim is cited.** Sourced from a real, web-searched, dated reference logged in
-`citations.md`, with a confidence note. QA audits sentence by sentence. Unsupported claims are
-sourced, softened to explicitly-marked opinion, or cut — never invented, never hand-waved.
+**You do the topic research; the factory does the niches and the writing.** This is a deliberate
+split. The factory never goes off and decides what your book's evidence base should be. You drop
+material into `books/<slug>/research/source-material/` — papers, PDFs, links, notes, your own
+expertise written out — and the Researcher verifies it, logs it, and hands you back a gap list.
+
+**Every factual claim is still cited.** Because the rule that matters isn't "do research," it's
+**never invent a source.** A claim with nothing behind it gets softened to explicitly-marked
+opinion or cut. QA audits sentence by sentence. That rule costs you nothing when you're the one
+supplying the material, and it's the only thing standing between you and a book containing a
+confident, plausible, entirely fictional statistic.
+
+**Books that assert nothing skip the phase entirely.** Journals, prompt books, workbooks, and most
+fiction never touch it — the stepper shows it struck through, and the pipeline goes brief → voice →
+outline.
 
 **No AI slop.** `CLAUDE.md` §7 is an explicit ban list — generic openers, hedge padding,
 over-signposting, reflexive tricolons, empty abstractions, listicle-brain prose. The Editor hunts
@@ -214,7 +226,9 @@ books/
     ├── outline.md
     ├── citations.md
     ├── market/           # bestseller-scan, niche-map, recommendation, originality
-    ├── research/         # dossier + topic files
+    ├── research/
+    │   ├── source-material/  # ← YOU put sources here
+    │   └── coverage.md       # ← what's covered, and the gap list to act on
     ├── manuscript/       # one markdown file per chapter
     ├── qa/               # per-chapter reports, changelogs, final report
     ├── export/           # generated KDP files
@@ -255,7 +269,9 @@ writer-block/
 2. In Claude Code: `Start a new book: <title> / <genre> / <topic>`.
 3. Claude runs the Market Scout and stops. Read `market/` in the UI, click **Approve**.
 4. Back in Claude Code: `continue`. It drafts the brief and stops. Approve.
-5. Repeat through voice, research, and outline.
+5. Repeat through voice. At the sources gate, either drop your material into
+   `research/source-material/` and let the Researcher check it, or let Claude skip the phase if the
+   book asserts no facts. Then outline.
 6. Drafting runs chapter by chapter with Writer→Editor→QA loops, checkpointing at each section.
 7. Full-manuscript QA, then export.
 8. Open **Export**, build EPUB + print PDF + metadata, read `PUBLISH.md`, upload to KDP.

@@ -189,6 +189,9 @@ async function scanBook(slug, base = BOOKS_DIR) {
     wordCount: words,
     currentCheckpoint: decisions.currentCheckpoint || phase,
     awaitingApproval: Boolean(decisions.awaitingApproval),
+    skippedPhases: (decisions.decisions || [])
+      .filter((d) => d.verdict === 'skipped')
+      .map((d) => d.checkpoint),
     created: meta.created || null,
     updated: meta.updated || (stat ? stat.mtime.toISOString() : null),
   };
@@ -238,9 +241,33 @@ async function scaffoldBook({ title, genre, topic, subtitle = '' }) {
   const dir = path.join(BOOKS_DIR, slug);
   if (exists(dir)) throw httpError(409, `books/${slug} already exists`);
 
-  for (const sub of ['market', 'research', 'manuscript', 'qa', 'export']) {
+  for (const sub of ['market', 'research', 'research/source-material', 'manuscript', 'qa', 'export']) {
     await fs.mkdir(path.join(dir, sub), { recursive: true });
   }
+
+  // The factory does not do topic research (CLAUDE.md §0.2) — this is where the human's material
+  // goes. A README in the folder is the cheapest way to make that obvious at the filesystem level.
+  await fs.writeFile(
+    path.join(dir, 'research', 'source-material', 'README.md'),
+    [
+      '# Drop your source material here',
+      '',
+      'The factory does **not** go find subject-matter research. Put whatever you have in this',
+      'folder — papers, PDFs, saved links, notes, transcripts, your own expertise written out.',
+      '',
+      'The Researcher then reads it, verifies the citation details are real and correctly stated,',
+      'logs entries in `../../citations.md`, and writes `../coverage.md` listing what the book needs',
+      'that your material does not cover. It never adds a source you did not supply.',
+      '',
+      'If this folder is empty and the book needs to assert facts, the Producer stops and asks you',
+      'for material rather than inventing it.',
+      '',
+      'Leave it empty for books that assert nothing — journals, prompt books, most fiction. The',
+      'sources phase is skipped in that case.',
+      '',
+    ].join('\n'),
+    'utf8',
+  );
 
   const vars = { TITLE: title, SLUG: slug, DATE: nowISO().slice(0, 10) };
   await copyTemplate('book-brief.md', path.join(dir, 'brief.md'), vars);
@@ -480,8 +507,10 @@ app.post('/api/books/:slug/decision', wrap(async (req, res) => {
   const { slug } = req.params;
   const { checkpoint, verdict, comment = '' } = req.body || {};
   if (!PHASES.includes(checkpoint)) throw httpError(400, `checkpoint must be one of ${PHASES.join(', ')}`);
-  if (!['approved', 'changes_requested'].includes(verdict)) {
-    throw httpError(400, 'verdict must be approved or changes_requested');
+  // "skipped" is how a conditional phase (currently only `research`) gets recorded as
+  // deliberately not run, rather than silently absent. See CLAUDE.md §2.2.
+  if (!['approved', 'changes_requested', 'skipped'].includes(verdict)) {
+    throw httpError(400, 'verdict must be approved, changes_requested, or skipped');
   }
 
   const file = path.join(bookDir(slug), 'decisions.json');
