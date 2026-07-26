@@ -69,10 +69,27 @@ books/tether/export/book-6x9.pdf
 **Title / subtitle / description / keywords / categories:** all in `export/metadata.md`.
 `blurb.txt` and `keywords.txt` are paste-ready.
 
-**Cover:** not built here. `metadata.md` §8 has back-cover copy, spine text, and a full design
-brief. KDP's cover template generator needs the final page count (222) and paper type (cream) to
-compute the spine width — get the template from KDP after the interior is uploaded, so the spine
-math comes from their numbers rather than an estimate.
+**Cover:** artwork is not built here, but the exact canvas is.
+
+| file | what it is |
+|------|-----------|
+| `export/cover-spec.md` | **The numbers.** Full wrap **12.805" × 9.25" at 300 DPI** (3842 × 2775 px), spine **0.555"**, every zone coordinate, barcode keep-clear rectangle, checklist. Generated from KDP's published formula at 222 pages / cream. |
+| `export/cover-brief.md` | **The direction.** One executable concept, typography, palette with hex values, back-cover layout, spine text, and a category-specific "do not" list. |
+| `export/cover-spec.json` | Same numbers, machine-readable. |
+
+Hand both to a designer, or execute the brief yourself in Canva — the spec is the document setup.
+
+⚠️ **The spine is a function of the page count.** At 222 pages it's 0.555"; every ~10 pages moves it
+about 0.025", which is enough to push spine type onto the front cover. If the interior changes,
+regenerate:
+
+```bash
+node app/export/cover-spec.js --pages <new count> --trim 6x9 --paper cream --title "Tether" > books/tether/export/cover-spec.md
+```
+
+Also download **KDP's own cover template** for 6 × 9 / 222 pages / cream. It's free and arrives with
+the zones drawn. Our numbers come from KDP's published formula, but their generator is what the
+upload is validated against — if the two ever disagree, theirs wins.
 
 ---
 
@@ -124,10 +141,11 @@ From `export/interior-report.json` and `qa/final-report.md`:
 - ✅ 0 hits on the AI-tell ban list (one permitted quotation, logged in the QA report)
 - ✅ Citation IDs stripped from the print PDF — verified by text extraction
 - ✅ No dates anywhere in the interior
+- ✅ Cover canvas computed from the interior's actual page count (222), not an estimate
 
-**One open non-blocking item:** prompts 85–89 all open with "What," which trips the voice spec's
-form-variation rule. These are author-specified prompts, so QA flagged rather than overruled.
-`qa/final-report.md` §B1 has a two-word proposed fix awaiting your call.
+**QA verdict: PASS**, no open manuscript items. The one finding that needed your ruling (prompts
+85–89 sharing an opening word) was accepted and applied on 2026-07-24 — see `qa/final-report.md`
+§B1.
 
 ---
 

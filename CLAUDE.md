@@ -77,7 +77,7 @@ writer-block/
 ├── CLAUDE.md              # this file — the canonical runbook
 ├── README.md              # human-facing: how to run the factory
 ├── .claude/agents/        # subagent definitions (producer, market-scout, researcher,
-│                          #   voice-architect, storyboarder, writer, editor, qa)
+│                          #   voice-architect, storyboarder, writer, editor, qa, cover-spec)
 ├── templates/             # blank scaffolds copied into each new book
 ├── app/                   # local web control panel (Node/Express + vanilla SPA)
 │   ├── server.js          # REST API over books/ + export runner
@@ -428,7 +428,22 @@ for the print PDF instead of using pandoc.
 - **Back:** closing note, about the author, also-by, call to action.
 - **Never invent reviews, endorsements, blurbs from real people, or awards.**
 
-### 9.4 Metadata pack
+### 9.4 Cover
+
+The factory produces a cover **specification and design brief**, never artwork.
+
+- `app/export/cover-spec.js` computes the full-wrap canvas from the finished page count using KDP's
+  published formula. **The spine width is a function of the page count**, so this runs only after
+  the interior is final, and must be re-run after any interior change — one added page moves the
+  spine and shifts both covers.
+- The **Cover Spec** agent runs the calculator (never does the arithmetic itself) and writes the
+  design brief: concept, typography, palette, back cover, spine, and a category-specific "do not"
+  list drawn from the bestseller scan.
+- Output: `export/cover-spec.md` (generated) + `export/cover-brief.md` (written).
+- Always tell the author to download KDP's own cover template and check against it. Ours comes from
+  KDP's published formula; theirs is what the upload is validated against, and theirs wins.
+
+### 9.5 Metadata pack
 Title + subtitle options · sales-page description · 7 backend keywords · 2–3 category
 recommendations · comp titles. Every book gets a `PUBLISH.md` naming the exact file to upload for
 the ebook vs. the paperback and the recommended KDP settings.
@@ -447,6 +462,7 @@ the ebook vs. the paperback and the recommended KDP settings.
 | Writer | `.claude/agents/writer.md` | phase `drafting` | `manuscript/*` |
 | Editor | `.claude/agents/editor.md` | phase `drafting` | `manuscript/*` + changelog |
 | QA | `.claude/agents/qa.md` | phase `drafting`, `qa` | `qa/*` |
+| Cover Spec | `.claude/agents/cover-spec.md` | phase `export`, **after the interior page count is final** | `export/cover-spec.md`, `export/cover-brief.md` |
 
 The Producer never writes prose. The Writer never invents facts. The Researcher never adds a source
 the human didn't supply. QA never approves its own fixes.

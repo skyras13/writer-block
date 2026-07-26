@@ -1,10 +1,11 @@
 {
   "name": "book-factory",
   "version": "1.0.0",
-  "description": "Book Factory — reusable pipeline for producing publication-quality books for KDP.",
+  "description": "Book Factory \u2014 reusable pipeline for producing publication-quality books for KDP.",
   "scripts": {
     "start": "cd app && npm start",
-    "doctor": "node app/export/build.js --doctor"
+    "doctor": "node app/export/build.js --doctor",
+    "cover": "node app/export/cover-spec.js"
   },
   "keywords": [],
   "author": "",

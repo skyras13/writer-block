@@ -1,0 +1,90 @@
+{
+  "ok": true,
+  "warnings": [],
+  "errors": [],
+  "input": {
+    "pages": 222,
+    "trim": "6x9",
+    "trimW": 6,
+    "trimH": 9,
+    "paper": "cream",
+    "caliper": 0.0025,
+    "coverAllowance": 0
+  },
+  "spine": {
+    "inches": 0.555,
+    "mm": 14.1,
+    "kdpFormulaInches": 0.555,
+    "formula": "222 pages × 0.0025\" (cream) = 0.555\"",
+    "textAllowed": true,
+    "textClearance": 0.0625,
+    "usableTextWidth": 0.43
+  },
+  "canvas": {
+    "widthInches": 12.805,
+    "heightInches": 9.25,
+    "widthMm": 325.25,
+    "heightMm": 234.95,
+    "widthPx": 3842,
+    "heightPx": 2775,
+    "dpi": 300,
+    "formula": "0.125 + 6 + 0.555 + 6 + 0.125 = 12.805\" wide · 0.125 + 9 + 0.125 = 9.25\" tall"
+  },
+  "zones": {
+    "backCover": {
+      "x": 0.125,
+      "y": 0.125,
+      "w": 6,
+      "h": 9
+    },
+    "spine": {
+      "x": 6.125,
+      "y": 0.125,
+      "w": 0.555,
+      "h": 9
+    },
+    "frontCover": {
+      "x": 6.68,
+      "y": 0.125,
+      "w": 6,
+      "h": 9
+    },
+    "backCoverSafe": {
+      "x": 0.25,
+      "y": 0.25,
+      "w": 5.75,
+      "h": 8.75
+    },
+    "frontCoverSafe": {
+      "x": 6.805,
+      "y": 0.25,
+      "w": 5.75,
+      "h": 8.75
+    },
+    "spineTextSafe": {
+      "x": 6.1875,
+      "y": 0.25,
+      "w": 0.43,
+      "h": 8.75
+    },
+    "barcodeKeepClear": {
+      "x": 3.875,
+      "y": 7.675,
+      "w": 2,
+      "h": 1.2
+    }
+  },
+  "checklist": [
+    "Canvas exactly 12.805\" × 9.25\" at 300 DPI (3842 × 2775 px).",
+    "Single PDF, one page, full wrap — back cover on the left, spine centre, front cover on the right.",
+    "Background art runs to the canvas edge; nothing important within 0.125\" of it.",
+    "Keep all text 0.125\" inside the trim lines on front and back.",
+    "Spine text stays within 0.43\" — 0.0625\" clear of each spine edge.",
+    "Leave the barcode rectangle clear: 2\" × 1.2\", bottom-right of the back cover, 0.25\" in from the trim edges.",
+    "Embed every font, or outline the type.",
+    "CMYK or greyscale; flatten transparency.",
+    "Title and author on the cover must match the KDP metadata exactly, or the upload is rejected.",
+    "Re-run this after ANY interior change — one added page moves the spine and shifts both covers.",
+    "Download KDP's own template with the final page count and check this against it. Theirs is authoritative."
+  ]
+}

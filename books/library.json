@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-26T15:07:40.262Z",
+  "generated": "2026-07-26T19:21:47.190Z",
   "note": "Cache. books/ is the source of truth — this file is rebuilt by scanning it.",
   "books": [
     {
@@ -13,7 +13,7 @@
       "status": "active",
       "chapterCount": 15,
       "qaPassed": 1,
-      "wordCount": 2790,
+      "wordCount": 2791,
       "currentCheckpoint": "export",
       "awaitingApproval": true,
       "skippedPhases": [],

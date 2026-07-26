@@ -9,9 +9,9 @@ rebuilding between books.
 
 Two halves:
 
-- **The pipeline** — eight specialist Claude Code agents (Producer, Market Scout, Researcher, Voice
-  Architect, Storyboarder, Writer, Editor, QA) that run a gated assembly line from market research
-  to KDP-ready files.
+- **The pipeline** — nine specialist Claude Code agents (Producer, Market Scout, Researcher, Voice
+  Architect, Storyboarder, Writer, Editor, QA, Cover Spec) that run a gated assembly line from
+  market research to KDP-ready files.
 - **The control panel** — a local web app for reading, editing, approving, and exporting, so you're
   not driving the whole thing through chat.
 
@@ -97,7 +97,7 @@ Start a new book: <title> / <genre> / <topic>
 Nothing advances on a failed gate. Two failed QA loops on one chapter escalates to you with a
 diagnosis instead of silently trying a third time.
 
-### The eight agents
+### The nine agents
 
 | agent | what it does |
 |-------|--------------|
@@ -109,6 +109,7 @@ diagnosis instead of silently trying a third time.
 | **Writer** | Drafts one chapter at a time from the outline. Marks gaps `[NEEDS SOURCE]` for you rather than guessing. |
 | **Editor** | Developmental + line edit. Strips AI tells and filler. Doesn't approve. |
 | **QA** | The gate. Six-dimension rubric. Defaults to FAIL. |
+| **Cover Spec** | Computes the exact KDP cover canvas from the final page count, and writes the design brief. Dimensions and direction — not artwork. |
 
 Definitions live in `.claude/agents/`. The master runbook is `CLAUDE.md` — read that if you want to
 change how the factory behaves.
@@ -176,6 +177,7 @@ Three publishable formats from one manuscript source:
 | 📄 Export Word manuscript | `book.docx` | KDP also accepts this for ebooks; it's also what you hand a human editor. |
 | 🖨️ Export paperback interior | `book-6x9.pdf` | **The paperback interior upload.** Mirrored margins, gutter, running heads. Trim: 5×8, 5.5×8.5, 6×9. |
 | 🧾 Export metadata pack | `metadata.md`, `blurb.txt`, `keywords.txt` | Paste-ready KDP listing fields. |
+| (agent) Cover spec | `cover-spec.md`, `cover-brief.md` | Exact cover canvas + design brief. |
 | 📦 Export all | zipped `export/` | Everything, one download. |
 
 Each book also gets a `PUBLISH.md` saying exactly which file to upload where, and with what
@@ -200,6 +202,23 @@ Check anytime:
 ```bash
 cd app && npm run doctor
 ```
+
+### Covers
+
+The factory produces a cover **spec and brief**, not artwork — a KDP cover is mostly arithmetic and
+typography discipline, and the spine width is a function of the final page count.
+
+```bash
+node app/export/cover-spec.js --pages 222 --trim 6x9 --paper cream --title "Tether"
+```
+
+Gives you the full-wrap canvas, every zone coordinate, the barcode keep-clear rectangle, and a
+checklist. Constants come from KDP's published formula. **Re-run it after any interior change** —
+one added page moves the spine and shifts both covers.
+
+Note: several popular third-party KDP calculators add `+0.06"` to the spine as a "cover allowance."
+That is not in KDP's formula and this tool does not add it. Pass `--allowance` if you want it, and
+it's reported as a separate line so it can't be mistaken for Amazon's number.
 
 **Fixed-layout books.** Journals and workbooks can't go through markdown→PDF — ruled write-in
 areas, facing-page spreads, and fixed pagination need real layout control. Those books ship their

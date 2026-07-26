@@ -1,20 +1,21 @@
 # QA Report — Full Manuscript: Tether
 
-**Verdict:** PASS (notes) · **Loop:** 1 · **Date:** 2026-07-24
+**Verdict:** PASS · **Loop:** 1 · **Date:** 2026-07-24 · **B1 resolved:** 2026-07-24
 **Scope:** front matter, 90 prompts across 13 weeks, 13 Weekly Tethers, back matter, and the
 generated 6 × 9 interior.
 
 | dimension | verdict | blocking | notes |
 |---|---|---|---|
 | A. Citation audit | **PASS** | 0 | 3 claims, 3 primary sources, all correctly scaled |
-| B. Voice conformance | **PASS (notes)** | 0 | 1 non-blocking finding (prompt-form run) |
+| B. Voice conformance | **PASS** | 0 | prior finding B1 resolved 2026-07-24 |
 | C. Continuity / consistency | **PASS** | 0 | — |
 | D. Structure / promise delivery | **PASS** | 0 | — |
 | E. Readability | **PASS** | 0 | — |
 | F. Originality / AI-tells | **PASS (notes)** | 0 | 1 permitted quotation flagged for the record |
 
-**Overall: PASS.** No blocking findings. Two non-blocking items below, one of which needs a human
-decision because it touches content the human specified verbatim.
+**Overall: PASS.** No blocking findings. The one item that needed an author ruling (B1, a
+prompt-form run in week 13) was accepted and applied; the remaining note (F1) is a permitted
+quotation logged for the record.
 
 ---
 
@@ -75,8 +76,8 @@ Sample B — instructional without a single imperative about feelings. ✅
 any prompt). No therapy-speak. No vagueness — every prompt is time-bound or instance-bound. Not
 preachy — the book asks and never teaches. ✅
 
-### 🔸 B1 — NON-BLOCKING, needs a human decision
-**Prompts 85–89 all open with "What."** Five consecutive prompts sharing a form. The voice spec
+### ✅ B1 — RESOLVED 2026-07-24 (author accepted the proposed fix)
+**Was: prompts 85–89 all opened with "What."** Five consecutive prompts sharing a form. The voice spec
 (§4) says "a run of five questions in a row is a defect," and the outline's form-variation rule says
 no three consecutive prompts share a form.
 
@@ -100,7 +101,11 @@ overrule the author.
 - 88 → *"These pages taught you to notice something. Say what."*
 
 That breaks the run to two-then-two and keeps every prompt original and on-voice.
-**Awaiting the human's call.** Nothing else in the book depends on it.
+**Author's ruling: accepted.** Both edits applied verbatim. Week 13 now reads
+What / Name / What / These / What / Write — **no run of three anywhere in the 90.**
+
+Re-verified after the change: 90 prompts, 0 duplicates, 0 closed questions, 0 ban-list hits, and
+the interior rebuilt at 222 pages with 90/90 spreads correct and 0 parity errors.
 
 ## C. Continuity and consistency
 
@@ -150,7 +155,8 @@ outcome. Checked against the actual text, not the outline.
 
 - **Prompt length variance is real:** 7 to 18 words, median 11. Not a metronome.
 - **Form mix across 90:** 74 questions, 9 descriptive instructions (Describe/Name/Recall), 4
-  sentence stems, 3 with an internal turn. Only one run of same-form prompts exists (B1).
+  sentence stems, 3 with an internal turn. **No run of three same-form prompts anywhere** (the
+  sole run, B1 in week 13, was fixed 2026-07-24).
 - **Front matter reads aloud cleanly.** No stumbles. The essay's shortest sentence — "This journal
   is ninety days of looking up." — lands where the voice spec says a section should close.
 - **Opens cold.** "A tether is the line that keeps two things joined when one of them drifts." No
@@ -191,8 +197,7 @@ No change required. Flagged so a future QA pass doesn't re-open it.
 
 ## Recommended (non-blocking)
 
-1. **[B1]** Break the "What" run at prompts 85–89. Two-word-level edits proposed above. **Human
-   decision — these are author-specified prompts.**
+1. ~~**[B1]** Break the "What" run at prompts 85–89.~~ **Done 2026-07-24.**
 2. **[Production]** The interior currently embeds Georgia, a system font not licensed for
    commercial embedding. Drop an OFL serif (EB Garamond, Crimson Pro, Libre Baskerville) into
    `export/fonts/` and rerun before publishing. Carried into `PUBLISH.md` as a blocker there.
