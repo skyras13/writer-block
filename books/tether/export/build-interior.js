@@ -19,7 +19,22 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const PDFDocument = require('pdfkit');
+
+// pdfkit is a ROOT dependency — book-local generators resolve up the tree from
+// books/<slug>/export/. Installing only in app/ leaves this broken, which is the
+// trap a fresh clone falls into, so fail with an instruction rather than a stack trace.
+let PDFDocument;
+try {
+  PDFDocument = require('pdfkit');
+} catch {
+  console.error(
+    '\n  This interior generator needs pdfkit, which installs at the REPO ROOT\n' +
+    '  (not in app/ — book-local generators resolve modules up the tree).\n\n' +
+    '  Run:  npm run setup      # from the repo root\n' +
+    '  Then: npm run doctor     # to confirm\n',
+  );
+  process.exit(1);
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const BOOK_DIR = path.resolve(__dirname, '..');

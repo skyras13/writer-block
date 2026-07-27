@@ -22,11 +22,31 @@ Backing up a book is copying a folder.
 
 ## Quick start
 
+From the repo root:
+
 ```bash
-cd app && npm install && npm start
+npm run setup
+```
+
+```bash
+npm run doctor
+```
+
+```bash
+npm start
 ```
 
 Then open **http://localhost:3000**.
+
+`npm run setup` installs both places — the root (`pdfkit`, used by fixed-layout interior generators)
+and `app/` (`express`, the control panel). Installing only in `app/` leaves journal exports broken,
+so use the root script rather than installing by hand.
+
+`npm run doctor` is the preflight. It separates **broken** (the system won't work — fix first) from
+**degraded** (runs without it) from **notes** (launch-gate items that are your call, not defects),
+and reports the real state of every book: interior page count, facing-page parity, QA verdict, open
+`[NEEDS SOURCE]` markers, unfilled placeholders, and whether the cover spec is stale against the
+current page count. Exit code is non-zero only for genuinely broken.
 
 To start writing a book, open Claude Code in the repo root and type:
 
@@ -148,7 +168,7 @@ the manuscript, title, and cover before publishing.)*
 
 ## The control panel
 
-`cd app && npm install && npm start` → http://localhost:3000
+`npm start` from the repo root → http://localhost:3000
 
 - **Library** — cards per book with phase, progress, word count, and whether it's waiting on you.
   `+ New Book` scaffolds a folder. Per-book management: rename, duplicate, archive, trash, backup.
@@ -200,7 +220,7 @@ a fallback but can't do a real gutter.
 Check anytime:
 
 ```bash
-cd app && npm run doctor
+npm run doctor
 ```
 
 ### Covers
@@ -270,6 +290,7 @@ writer-block/
 ├── README.md              # this file
 ├── .claude/agents/        # the eight agent definitions
 ├── templates/             # scaffolds copied into each new book
+├── scripts/doctor.js      # preflight — run this first
 ├── app/                   # the control panel
 │   ├── server.js          # REST API over books/ + export runner
 │   ├── public/            # dashboard, tracker, reader/editor, research view, export panel
@@ -284,7 +305,7 @@ writer-block/
 
 ## Typical session
 
-1. `cd app && npm start`, leave it running.
+1. `npm start` from the repo root, leave it running.
 2. In Claude Code: `Start a new book: <title> / <genre> / <topic>`.
 3. Claude runs the Market Scout and stops. Read `market/` in the UI, click **Approve**.
 4. Back in Claude Code: `continue`. It drafts the brief and stops. Approve.

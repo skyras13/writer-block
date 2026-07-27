@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "Book Factory \u2014 reusable pipeline for producing publication-quality books for KDP.",
   "scripts": {
-    "start": "cd app && npm start",
-    "doctor": "node app/export/build.js --doctor",
+    "setup": "npm install && npm --prefix app install",
+    "start": "npm --prefix app start",
+    "doctor": "node scripts/doctor.js",
     "cover": "node app/export/cover-spec.js"
   },
   "keywords": [],
