@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-26T19:21:47.190Z",
+  "generated": "2026-07-27T04:03:34.614Z",
   "note": "Cache. books/ is the source of truth — this file is rebuilt by scanning it.",
   "books": [
     {
