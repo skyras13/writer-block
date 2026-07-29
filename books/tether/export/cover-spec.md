@@ -8,7 +8,7 @@
 > page moves the spine and shifts both covers.
 
 - **Book:** Tether — A Couples Gratitude Journal for Noticing Why
-- **Author:** [AUTHOR NAME]
+- **Author:** Skyler Rasmussen
 - **Interior:** 222 pages · 6 × 9 in · cream paper
 
 ---

@@ -57,10 +57,11 @@ Put it somewhere you'll find it again.
 
 **Tether: A Couples Gratitude Journal for Noticing Why**
 
-Written and designed by [AUTHOR NAME]
+Written and designed by Skyler Rasmussen
 First edition, 2026
 
-Set in a transitional serif for the prompts and a humanist sans for labels.
+Set in EB Garamond, an old-style serif after Claude Garamond,
+released under the SIL Open Font License.
 Printed on cream stock, 6 × 9.
 
 All ninety prompts and thirteen weekly reflections are original to this journal.
@@ -75,4 +76,4 @@ Research referenced in "The Tether":
 - Slatcher, R. B., & Pennebaker, J. W. (2006). How do I love thee? Let me count the words: The
   social effects of expressive writing. *Psychological Science, 17*(8), 660–664.
 
-[AUTHOR CONTACT / IMPRINT]
+<!-- Optional: add a contact line, website, or imprint name here. -->

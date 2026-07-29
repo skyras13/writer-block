@@ -162,14 +162,52 @@ function parseWeek(md) {
 
 /** Markdown → plain paragraphs. Inline citation IDs are working-copy apparatus, not reader text. */
 function toParagraphs(md) {
-  return md
+  const cleaned = md
     // Swallow the leading space too, or "…later [C-001]." leaves "…later ." on the page.
     .replace(/[ \t]*\[C-[\w-]+\]/g, '')
     .replace(/\s+([.,;:!?])/g, '$1')
-    .replace(/`([^`]+)`/g, '$1')
-    .split(/\n{2,}/)
-    .map((p) => p.replace(/\n/g, ' ').trim())
-    .filter(Boolean);
+    .replace(/`([^`]+)`/g, '$1');
+
+  const out = [];
+  for (const block of cleaned.split(/\n{2,}/)) {
+    const lines = block.split('\n');
+    // A run of "- " lines is a list, not one paragraph. Without this the back-matter
+    // reference list printed as a single wall with visible "- " separators mid-sentence.
+    if (lines.some((l) => /^\s*-\s+/.test(l))) {
+      let buf = '';
+      for (const line of lines) {
+        if (/^\s*-\s+/.test(line)) {
+          if (buf.trim()) out.push(buf.trim());
+          buf = line.replace(/^\s*-\s+/, '');
+        } else {
+          buf += ` ${line.trim()}`;
+        }
+      }
+      if (buf.trim()) out.push(buf.trim());
+    } else {
+      const t = lines.join(' ').trim();
+      if (t) out.push(t);
+    }
+  }
+  return out;
+}
+
+/**
+ * Split *emphasis* into typed runs so it can be set in italic rather than printed with its
+ * asterisks. Markdown markers reaching paper is the kind of defect a reader notices instantly
+ * and an author never sees, because the source looks correct.
+ */
+function splitEmphasis(text) {
+  const runs = [];
+  const re = /(?<!\*)\*([^*\n]+)\*(?!\*)/g;
+  let last = 0, m;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) runs.push({ t: text.slice(last, m.index), italic: false });
+    runs.push({ t: m[1], italic: true });
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) runs.push({ t: text.slice(last), italic: false });
+  return runs.length ? runs : [{ t: text, italic: false }];
 }
 
 /* ---------------------------------------------------------------------------
@@ -252,12 +290,28 @@ class Interior {
     this.doc.y += gapAfter;
   }
 
-  para(text, { size = 10.5, italic = false, align = 'left', gapAfter = 9, color = INK, indent = 0 } = {}) {
-    this.doc.font(this.fonts[italic ? 'italic' : 'regular']).fontSize(size).fillColor(color)
-      .text(text, this.left + indent, this.doc.y, {
-        width: this.colWidth - indent, align, lineGap: 2.6, paragraphGap: 0,
+  para(text, { size = 11.5, italic = false, align = 'left', gapAfter = 9, color = INK, indent = 0 } = {}) {
+    const { doc } = this;
+    const opts = { width: this.colWidth - indent, align, lineGap: 2.6, paragraphGap: 0 };
+    const runs = italic ? [{ t: text, italic: true }] : splitEmphasis(text);
+
+    doc.fontSize(size).fillColor(color);
+
+    if (runs.length === 1) {
+      doc.font(this.fonts[runs[0].italic ? 'italic' : 'regular'])
+        .text(runs[0].t, this.left + indent, doc.y, opts);
+    } else {
+      // Mixed-style paragraph: emit continued runs so the line breaking stays correct across
+      // the font switches, and close the run so the next paragraph starts on its own line.
+      const startY = doc.y;
+      runs.forEach((r, i) => {
+        doc.font(this.fonts[r.italic ? 'italic' : 'regular']);
+        const o = { ...opts, continued: i < runs.length - 1 };
+        if (i === 0) doc.text(r.t, this.left + indent, startY, o);
+        else doc.text(r.t, o);
       });
-    this.doc.y += gapAfter;
+    }
+    doc.y += gapAfter;
   }
 
   smallCaps(text, { size = 7.5, align = 'left', color = FAINT, gapAfter = 8 } = {}) {
@@ -383,7 +437,7 @@ export async function buildInterior({ bookDir = BOOK_DIR, outDir, trim = '6x9' }
   I.newPage({ folio: false });
   doc.y = I.H * 0.33;
   I.para(page('epigraph').body.replace(/^\*|\*$/g, ''),
-    { size: 12, italic: true, align: 'center', gapAfter: 0 });
+    { size: 13, italic: true, align: 'center', gapAfter: 0 });
 
   // "The Tether" essay — opens recto
   I.newPage({ folio: false });   // p4 blank verso
@@ -391,7 +445,7 @@ export async function buildInterior({ bookDir = BOOK_DIR, outDir, trim = '6x9' }
   I.heading('The Tether', { size: 22, gapAfter: 20 });
   for (const p of toParagraphs(page('essay').body)) {
     if (doc.y > I.textBottom - 50) { I.newPage({ head: '' }); }
-    I.para(p, { size: 10.5, gapAfter: 10 });
+    I.para(p, { size: 11.5, gapAfter: 10 });
   }
 
   // How to Use — opens recto
@@ -400,7 +454,7 @@ export async function buildInterior({ bookDir = BOOK_DIR, outDir, trim = '6x9' }
   I.heading('How to Use This Journal', { size: 22, gapAfter: 20 });
   for (const p of toParagraphs(page('howto').body)) {
     if (doc.y > I.textBottom - 50) I.newPage({ head: '' });
-    I.para(p.replace(/\*\*/g, ''), { size: 10.5, gapAfter: 10 });
+    I.para(p.replace(/\*\*/g, ''), { size: 11.5, gapAfter: 10 });
   }
 
   // Before You Begin — opens recto, with write-in lines
@@ -417,7 +471,7 @@ export async function buildInterior({ bookDir = BOOK_DIR, outDir, trim = '6x9' }
 
   doc.y += 14;
   I.para('Write down one thing you each want out of the next ninety days. One sentence. Come back and read it on day ninety.',
-    { size: 10, italic: true, gapAfter: 20, color: SOFT });
+    { size: 11, italic: true, gapAfter: 20, color: SOFT });
 
   for (const label of ['One', 'Two']) {
     I.smallCaps(label, { size: 8, gapAfter: 2 });
@@ -437,7 +491,7 @@ export async function buildInterior({ bookDir = BOOK_DIR, outDir, trim = '6x9' }
     I.smallCaps(`Week ${wk.week}`, { size: 8, align: 'center', gapAfter: 14 });
     I.heading(wk.theme, { size: 24, align: 'center', gapAfter: 18 });
     I.ornament();
-    I.para(wk.epigraph, { size: 11, italic: true, align: 'center', gapAfter: 0, color: SOFT });
+    I.para(wk.epigraph, { size: 12, italic: true, align: 'center', gapAfter: 0, color: SOFT });
 
     // Daily spreads — One on verso, Two on recto.
     for (const prompt of wk.prompts) {
@@ -451,7 +505,7 @@ export async function buildInterior({ bookDir = BOOK_DIR, outDir, trim = '6x9' }
         I.smallCaps(`${side}  ·  ${prompt.n}`, {
           size: 7.5, align: side === 'One' ? 'left' : 'right', gapAfter: 12,
         });
-        I.para(prompt.text, { size: 12.5, gapAfter: 10 });
+        I.para(prompt.text, { size: 13.5, gapAfter: 10 });
         const lines = I.rules({ from: doc.y + 4 });
         if (side === 'One') I.spreadLog.push({ prompt: prompt.n, versoPage: n, lines });
       }
@@ -461,7 +515,7 @@ export async function buildInterior({ bookDir = BOOK_DIR, outDir, trim = '6x9' }
     I.newPage({ head: wk.theme });
     doc.y = I.top + 10;
     I.smallCaps('The Weekly Tether', { size: 8, gapAfter: 14 });
-    I.para(wk.tether, { size: 12.5, gapAfter: 6 });
+    I.para(wk.tether, { size: 13.5, gapAfter: 6 });
     I.para('Do this one together, out loud.', { size: 9, italic: true, gapAfter: 12, color: SOFT });
     I.rules({ from: doc.y });
   }
@@ -478,7 +532,7 @@ export async function buildInterior({ bookDir = BOOK_DIR, outDir, trim = '6x9' }
     for (const para of toParagraphs(p.body)) {
       if (doc.y > I.textBottom - 50) I.newPage({ head: p.heading, folio: id !== 'imprint' });
       I.para(para.replace(/\*\*/g, '').replace(/^-\s+/, ''), {
-        size: id === 'imprint' ? 8 : 10.5,
+        size: id === 'imprint' ? 9 : 11.5,
         gapAfter: id === 'imprint' ? 7 : 10,
         color: id === 'imprint' ? SOFT : INK,
       });

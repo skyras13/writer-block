@@ -55,19 +55,19 @@ rule repeated once, short, above it.
 
 ## 5. Typography
 
-- **Title:** transitional or old-style serif — the same family as the interior if you can license
-  it (EB Garamond, Crimson Pro, and Libre Baskerville are all OFL and free for commercial use, and
-  the interior already needs one of them). Large, roman, **title case, not all-caps, not script.**
-  Generous letter-spacing.
+- **Title:** **EB Garamond.** This is now the interior font, so the cover should match it — SIL Open
+  Font License, cleared for commercial embedding, and the files are already in
+  `books/tether/export/fonts/`. Large, roman, **title case, not all-caps, not script.** Generous
+  letter-spacing.
 - **Subtitle:** same family, small, italic or regular, roughly 22–25% of the title size, set below
   the rule.
 - **"90 Days · Write Apart, Reveal Together":** small caps or letter-spaced uppercase, quiet, near
   the bottom. **This line is the differentiator — it must be legible but must not shout.**
-- **Author:** small, bottom-centre, same family.
+- **Author:** `Skyler Rasmussen`, small, bottom-centre, same family.
 - Hierarchy: title ≫ subtitle > mechanic line > author.
 
 ⚠️ **The title and author on the cover must match the KDP metadata exactly**, or the upload is
-rejected. Title: `Tether`. Subtitle: `A Couples Gratitude Journal for Noticing Why`.
+rejected. Title: `Tether`. Subtitle: `A Couples Gratitude Journal for Noticing Why`. Author: `Skyler Rasmussen`.
 
 ## 6. Palette
 
@@ -103,7 +103,7 @@ clearance: **0.43"**.
 Reads, top to bottom (the convention for English-language books):
 
 ```
-TETHER   ·   A Couples Gratitude Journal        [AUTHOR NAME]
+TETHER   ·   A Couples Gratitude Journal        SKYLER RASMUSSEN
 ```
 
 Set in the ink colour on the ground colour, small caps or letter-spaced, centred in the spine.

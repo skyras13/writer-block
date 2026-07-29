@@ -2,46 +2,45 @@
 
 Exactly what to upload to KDP, and what to fix first.
 
-**Built:** 2026-07-24 · **Interior:** 222 pages · **Trim:** 6 × 9
+**Built:** 2026-07-24 · **Interior:** 222 pages · **Trim:** 6 × 9 · **Set in:** EB Garamond (OFL)
 
 ---
 
-## 🚧 Four things to do before you upload
+## ✅ Done since the last build
 
-None of these is a manuscript defect. All four are launch-gate items.
+- **Interior font swapped to EB Garamond** (SIL Open Font License, `fsType 0` — Installable
+  Embedding, no restriction). Static cuts from the upstream project, not the variable build Google
+  Fonts ships — pdfkit embeds a variable font's default instance only, so a `[wght]` file would
+  have rendered bold at weight 400. Files and `OFL.txt` are in `export/fonts/`; the licence has to
+  travel with the font, so it is committed alongside.
+- **Author name set** to Skyler Rasmussen — title page, copyright page, imprint.
+- **Type resized for Garamond.** Its x-height is smaller than Georgia's, so the sizes tuned for the
+  old font read light on a 6 × 9 page. Body 10.5 → 11.5 pt, prompts 12.5 → 13.5 pt.
+- **Fixed markdown emphasis printing its asterisks.** `*understood*` and seven other instances —
+  including the journal names in the reference list — were reaching paper with literal `*`.
+  The renderer now sets them as real italic runs.
+- **Fixed the reference list running together** as one block with visible `- ` separators.
+- **Removed printed placeholders.** `[ISBN]` and `[AUTHOR CONTACT]` no longer appear on the page;
+  both are now HTML comments, visible in the editor, invisible in print.
 
-### 1. Swap the interior font — **required for commercial print**
-The PDF currently embeds **Georgia**, a macOS system font. It renders beautifully and it is **not
-licensed for embedding in a commercially distributed book.**
+---
 
-Fix — three minutes:
+## 🚧 Two things left before you upload
 
-```bash
-mkdir -p books/tether/export/fonts
-# Download EB Garamond (SIL Open Font License — free for commercial embedding)
-# from fonts.google.com/specimen/EB+Garamond, then:
-#   EBGaramond-Regular.ttf, EBGaramond-Italic.ttf, EBGaramond-Bold.ttf
-# → books/tether/export/fonts/
-node books/tether/export/build-interior.js --trim 6x9
-```
+Neither is a manuscript defect.
 
-The generator prefers `export/fonts/` over system fonts automatically. Rerun and confirm the report
-shows the OFL names and **no font warnings**. Crimson Pro and Libre Baskerville also work.
+### 1. Add the ISBN
+KDP assigns it at upload. Then paste it into the copyright page in
+`manuscript/front-matter.md` (there is a comment marking the spot) and rebuild.
+A free KDP ISBN is fine unless you plan to print elsewhere later.
 
-### 2. Set the author name
-`[AUTHOR NAME]` is a placeholder on the title page, the copyright page, and the imprint. Set
-`meta.json → author`, then rerun the build.
-
-### 3. Run the KDP pricing calculator
-222 pages, 6 × 9, black & white, cream paper. KDP sets a minimum list price from page count, and
+### 2. Run the KDP pricing calculator
+222 pages, 6 × 9, black & white, cream paper. KDP derives a minimum list price from page count;
 $14.99 is a recommendation, not a verified-viable number.
 
-### 4. Confirm the gutter against KDP's current margin table
-The interior uses **0.85" inside / 0.6" outside**. That's correct for the 151–300 page band as of
-this build, and 222 pages sits comfortably inside it — but KDP updates the table, so check it.
-
-**Also outstanding** (from `market/originality.md` §e, non-blocking for upload but recommended):
-USPTO search on "Tether" in class 16 and on the exact subtitle.
+**Also recommended, non-blocking:** confirm the gutter against KDP's current margin table (the
+interior uses 0.85" inside / 0.6" outside, correct for the 151–300 page band), and the USPTO search
+on "Tether" in class 16 from `market/originality.md` §e.
 
 ---
 

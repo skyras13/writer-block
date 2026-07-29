@@ -13,13 +13,13 @@ citations_used: [C-001, C-002, C-003]
 
 ### 90 days · Write apart, reveal together
 
-*[AUTHOR NAME]*
+*Skyler Rasmussen*
 
 <!-- PAGE: copyright -->
 
 # Copyright
 
-Copyright © 2026 by [AUTHOR NAME]
+Copyright © 2026 by Skyler Rasmussen
 
 All rights reserved. No part of this book may be reproduced in any form without written permission
 from the publisher, except for brief quotations in a review.
@@ -28,7 +28,7 @@ The prompts, weekly reflections, and structure in this journal are original work
 
 First edition, 2026
 
-ISBN: [ISBN]
+<!-- ISBN: paste the KDP-assigned ISBN here before final upload, then rebuild -->
 
 This book is a journal, not therapy. It is not a substitute for professional help. If your
 relationship is in trouble, or if you are not safe, talk to someone qualified.

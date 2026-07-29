@@ -6,17 +6,14 @@
   "prompts": 90,
   "weeks": 13,
   "linesPerPage": 11,
-  "bytes": 224201,
+  "bytes": 220718,
   "fonts": {
-    "regular": "Georgia.ttf",
-    "italic": "Georgia Italic.ttf",
-    "bold": "Georgia Bold.ttf"
+    "regular": "EBGaramond-Regular.ttf",
+    "italic": "EBGaramond-Italic.ttf",
+    "bold": "EBGaramond-Bold.ttf"
   },
   "parityErrors": [],
   "warnings": [
-    "Using a system font for regular (Georgia.ttf). Fine for proofing; NOT licensed for commercial embedding. Put an OFL font in export/fonts/ before publishing.",
-    "Using a system font for italic (Georgia Italic.ttf). Fine for proofing; NOT licensed for commercial embedding. Put an OFL font in export/fonts/ before publishing.",
-    "Using a system font for bold (Georgia Bold.ttf). Fine for proofing; NOT licensed for commercial embedding. Put an OFL font in export/fonts/ before publishing.",
     "Gutter check: inside margin 0.85in / outside 0.6in. Confirm against KDP's current margin table for 222 pages before uploading."
   ]
 }
